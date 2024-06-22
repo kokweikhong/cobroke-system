@@ -1,0 +1,49 @@
+name: "cobroke-system"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cobroke-system-app
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - cobroke-system-network
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:16.2-alpine3.19
+    restart: always
+    container_name: cobroke-system-postgres
+    ports:
+      - "5432:5432"
+    deploy:
+      mode: replicated
+      replicas: 1
+    env_file:
+      - .env
+    # environment:
+    #   - POSTGRES_USER=cobroke
+    #   - POSTGRES_PASSWORD=cobroke
+    #   - POSTGRES_DB=cobroke
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - cobroke-system-network
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+    networks:
+      - cobroke-system-network
+
+volumes:
+  pgdata:
+
+networks:
+  cobroke-system-network:
+    name: cobroke-system-network
+    driver: bridge
+
