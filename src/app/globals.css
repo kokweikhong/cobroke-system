@@ -71,6 +71,14 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-poppins;
   }
+}
+
+html {
+  font-size: 14px;
+}
+
+span[role="slider"] {
+  cursor: pointer;
 }

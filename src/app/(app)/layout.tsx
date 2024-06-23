@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
-
-const inter = Inter({ subsets: ["latin"] });
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { poppins } from "@/lib/fonts";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,18 +18,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} h-full`}>
+      <body className={`${poppins.variable} h-full`}>
         <div className="bg-adminBackground">
           <Header />
           {/* <div className="hidden md:block h-full"> */}
           <Sidebar />
           {/* </div> */}
-          <main className="py-10 lg:pl-72">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              {children}
+          <main className="lg:pl-72">
+            <div className="px-8 py-6">
+              <ScrollArea className="mx-auto p-4 rounded-2xl bg-white min-h-screen">
+                <div className="h-ful p-4">{children}</div>
+              </ScrollArea>
             </div>
           </main>
         </div>
+        <Toaster richColors position="top-center" />
       </body>
     </html>
   );

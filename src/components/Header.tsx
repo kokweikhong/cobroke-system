@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, ArrowDownIcon, ChevronDownIcon } from "lucide-react";
 import Image from "next/image";
 import UserMenu from "./UserMenu";
 import Menu from "./Sidebar";
@@ -17,36 +17,35 @@ const Header = async () => {
   const fullName = session?.firstName + " " + session?.lastName;
   return (
     <header className="sticky top-0 z-40 lg:mx-auto lg:px-8">
-      <div className="flex h-16 items-center justify-between gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none">
+      <div className="flex h-16 items-center justify-between gap-x-4 border-b border-gray-200 bg-adminBackground px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none">
         <div className="flex gap-x-4 items-center">
           <div className="lg:hidden">
             <MobileMenu />
           </div>
-          <div>
+          <Link href={"/"} className="lg:ml-12">
             <Image
               src={logo}
               alt="Logo"
               width={500}
               height={500}
-              className="w-auto h-6 md:h-8 object-cover"
+              className="w-auto h-6 lg:h-8 object-cover"
             />
-          </div>
+          </Link>
         </div>
         {/* <div className="hidden md:block">
         <DesktopMenu />
       </div> */}
-
-        <UserMenu name={fullName} />
-        {/* <nav>
-        <ul>
-          <li>
-            <Link href="/">Home</Link>
-          </li>
-          <li>
-            <Link href="/about">About</Link>
-          </li>
-        </ul>
-      </nav> */}
+        {session?.isLogged ? (
+          <UserMenu name={fullName} />
+        ) : (
+          <Link
+            href="/auth/signin"
+            className="flex items-center gap-x-2 cursor-pointer font-medium"
+          >
+            <span>Register / Log in</span>
+            <ChevronDownIcon size={24} />
+          </Link>
+        )}
       </div>
     </header>
   );
