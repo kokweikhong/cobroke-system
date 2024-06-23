@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOutIcon, UserCogIcon } from "lucide-react";
+import { LogOutIcon, UserCogIcon, ChevronDownIcon } from "lucide-react";
 
 type UserMenuProps = {
   name: string;
@@ -18,7 +18,12 @@ type UserMenuProps = {
 export default function UserMenu(props: UserMenuProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>{props.name}</DropdownMenuTrigger>
+      <DropdownMenuTrigger>
+        <div className="flex items-center gap-x-2 cursor-pointer font-medium">
+          <span>{props.name}</span>
+          <ChevronDownIcon size="20" />
+        </div>
+      </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />

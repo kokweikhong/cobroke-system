@@ -18,6 +18,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import LandAreaInput from "./LandAreaInput";
+import BuiltUpAreaInput from "./BuiltUpAreaInput";
+import PriceInput from "./PriceInput";
 
 type SelectListing = InferSelectModel<typeof schema.listings>;
 
@@ -88,7 +90,7 @@ const MatchListingForm: FC<MatchListingFormProps> = ({ listing }) => {
                 <FormItem>
                   <FormLabel>Property Type</FormLabel>
                   <FormControl>
-                    <Input disabled {...field} />
+                    <Input className="capitalize" disabled {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -116,6 +118,8 @@ const MatchListingForm: FC<MatchListingFormProps> = ({ listing }) => {
             </div>
 
             <LandAreaInput form={form} value={listing.landArea || "0"} />
+            <BuiltUpAreaInput form={form} value={listing.builtUpArea || "0"} />
+            <PriceInput form={form} value={listing.price || "0"} />
 
             <div>
               <Button type="submit">Match Listing</Button>

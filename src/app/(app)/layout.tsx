@@ -5,6 +5,7 @@ import Sidebar from "@/components/Sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { poppins } from "@/lib/fonts";
 import { Toaster } from "@/components/ui/sonner";
+import QueryClientProvider from "@/components/QueryClientProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,22 +19,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} h-full`}>
-        <div className="bg-adminBackground">
-          <Header />
-          {/* <div className="hidden md:block h-full"> */}
-          <Sidebar />
-          {/* </div> */}
-          <main className="lg:pl-72">
-            <div className="px-8 py-6">
-              <ScrollArea className="mx-auto p-4 rounded-2xl bg-white min-h-screen">
-                <div className="h-ful p-4">{children}</div>
-              </ScrollArea>
-            </div>
-          </main>
-        </div>
-        <Toaster richColors position="top-center" />
-      </body>
+      <QueryClientProvider>
+        <body className={`${poppins.variable} h-full`}>
+          <div className="bg-adminBackground">
+            <Header />
+            {/* <div className="hidden md:block h-full"> */}
+            <Sidebar />
+            {/* </div> */}
+            <main className="lg:pl-72">
+              <div className="px-8 py-6">
+                <ScrollArea className="mx-auto p-4 rounded-2xl bg-white min-h-screen">
+                  <div className="h-ful p-4">{children}</div>
+                </ScrollArea>
+              </div>
+            </main>
+          </div>
+          <Toaster richColors position="top-center" />
+        </body>
+      </QueryClientProvider>
     </html>
   );
 }

@@ -10,27 +10,31 @@ import { cn } from "@/lib/utils";
 import * as schema from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import { useEffect, useState } from "react";
-import { GetListingsProps } from "./actions";
 import { getListings } from "./actions";
-import { SearchIcon } from "lucide-react";
 import FilterInput from "./_components/FilterInput";
+import Link from "next/link";
 
 type SelectListing = InferSelectModel<typeof schema.listings>;
 
 export default function Page() {
+  const [filter, setFilter] = useState<string>("");
   const [listings, setListings] = useState<SelectListing[]>([]);
 
-  async function fetchListings(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    console.log(formData.get("filter"));
-    const listings = await getListings(formData);
+  async function fetchListings() {
+    const listings = await getListings(filter);
+    console.log(listings);
     setListings(listings);
   }
 
+  useEffect(() => {
+    fetchListings();
+    console.log(listings);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div>
-      <FilterInput fetchListings={fetchListings} />
+      <FilterInput fetchListings={fetchListings} setFilter={setFilter} />
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger
@@ -42,7 +46,15 @@ export default function Page() {
           >
             Residential
           </AccordionTrigger>
-          <AccordionContent className="p-4"></AccordionContent>
+          <AccordionContent className="p-4">
+            {listings.map((listing) => (
+              <div key={listing.id}>
+                <Link href={`/admin/match-listing/${listing.id}`}>
+                  {listing.projectName}
+                </Link>
+              </div>
+            ))}
+          </AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>
