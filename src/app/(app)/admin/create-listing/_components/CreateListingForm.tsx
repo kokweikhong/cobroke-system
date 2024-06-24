@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { InferInsertModel } from "drizzle-orm";
 import * as schema from "@/db/schema";
 import { toast } from "sonner";
-import { createListing } from "@/actions/listing";
+import { createListing } from "@/actions/listing.actions";
 import { FC } from "react";
 
 type InsertListing = InferInsertModel<typeof schema.listings>;

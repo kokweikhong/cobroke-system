@@ -20,6 +20,8 @@ import { Slider } from "@/components/ui/slider";
 import LandAreaInput from "./LandAreaInput";
 import BuiltUpAreaInput from "./BuiltUpAreaInput";
 import PriceInput from "./PriceInput";
+import { MatchListingFormValues } from "@/types/listing.types";
+import ResidentialForm from "./ResidentialForm";
 
 type SelectListing = InferSelectModel<typeof schema.listings>;
 
@@ -27,21 +29,17 @@ type MatchListingFormProps = {
   listing: SelectListing;
 };
 
-export type MatchListingFormValues = {
-  listingType: string;
-  propertyType: string;
-  tenure: string;
-  propertyStatus: string;
-  projectName: string;
-  landArea: string;
-  builtUpArea: string;
-  price: string;
-  city: string;
-  state: string;
-};
-
 const MatchListingForm: FC<MatchListingFormProps> = ({ listing }) => {
-  const form = useForm<MatchListingFormValues>();
+  const form = useForm<MatchListingFormValues>({
+    defaultValues: {
+      minLandArea: 0,
+      maxLandArea: 0,
+      minBuiltUpArea: 0,
+      maxBuiltUpArea: 0,
+      minPrice: 0,
+      maxPrice: 0,
+    },
+  });
 
   function onSubmit(values: MatchListingFormValues) {
     console.log(values);
@@ -117,9 +115,53 @@ const MatchListingForm: FC<MatchListingFormProps> = ({ listing }) => {
               </div>
             </div>
 
-            <LandAreaInput form={form} value={listing.landArea || "0"} />
-            <BuiltUpAreaInput form={form} value={listing.builtUpArea || "0"} />
-            <PriceInput form={form} value={listing.price || "0"} />
+            <div>
+              <Label htmlFor="propertyStatus">Property Status</Label>
+              <div className="flex gap-x-2 items-center">
+                <Switch
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      form.setValue("propertyStatus", listing.propertyStatus);
+                    } else {
+                      form.setValue("propertyStatus", "");
+                    }
+                  }}
+                />
+                <Input
+                  id="propertyStatus"
+                  name="propertyStatus"
+                  disabled
+                  value={listing.propertyStatus}
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="projectName">Project Name</Label>
+              <div className="flex gap-x-2 items-center">
+                <Switch
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      form.setValue("projectName", listing.projectName);
+                    } else {
+                      form.setValue("projectName", "");
+                    }
+                  }}
+                />
+                <Input
+                  id="projectName"
+                  name="projectName"
+                  disabled
+                  value={listing.projectName}
+                />
+              </div>
+            </div>
+
+            <LandAreaInput form={form} value={listing.landArea || "20"} />
+            <BuiltUpAreaInput form={form} value={listing.builtUpArea || "30"} />
+            <PriceInput form={form} value={listing.price || "1000"} />
+
+            <ResidentialForm form={form} />
 
             <div>
               <Button type="submit">Match Listing</Button>

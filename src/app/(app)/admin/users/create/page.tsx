@@ -19,30 +19,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import logo from "@/../public/logo.svg";
-import Image from "next/image";
-import Link from "next/link";
-import { createUser } from "@/actions/user.actions";
 
 type InsertUser = InferInsertModel<typeof schema.users>;
 
 export default function Page() {
   const form = useForm<InsertUser>();
   return (
-    <div className="mt-10 min-h-full flex flex-col items-center justify-center max-w-3xl mx-auto px-4">
-      <Link href={"/"} className="mb-4">
-        <Image
-          src={logo}
-          alt="Cobroke System"
-          className="mx-auto h-10 w-auto"
-        />
-      </Link>
+    <div>
       <div className="mb-4">
         <h1 className="text-3xl font-bold text-gray-800">Create User</h1>
       </div>
-      <div className="w-full">
+      <div className="max-w-md">
         <Form {...form}>
-          <form action={createUser} className="space-y-4">
+          <form action="" className="space-y-4">
             <FormField
               control={form.control}
               name="firstName"

@@ -1,12 +1,10 @@
 import Link from "next/link";
 
-import { MenuIcon, ArrowDownIcon, ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon } from "lucide-react";
 import Image from "next/image";
 import UserMenu from "./UserMenu";
-import Menu from "./Sidebar";
 import { getAuthSession } from "@/actions/session";
 import logo from "../../public/logo.svg";
-import DesktopMenu from "./Sidebar";
 import MobileMenu from "./MobileMenu";
 
 const Header = async () => {
@@ -32,9 +30,7 @@ const Header = async () => {
             />
           </Link>
         </div>
-        {/* <div className="hidden md:block">
-        <DesktopMenu />
-      </div> */}
+
         {session?.isLogged ? (
           <UserMenu name={fullName} />
         ) : (

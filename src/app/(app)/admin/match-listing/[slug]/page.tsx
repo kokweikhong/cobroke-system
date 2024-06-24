@@ -1,10 +1,11 @@
 import { getAuthSession } from "@/actions/session";
 import MatchListingForm from "./_components/MatchListingForm";
-import { getListingById } from "./actions";
+import { getListingById } from "@/actions/listing.actions";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const session = await getAuthSession();
-  const listing = await getListingById(params.slug, session?.userId || "");
+  // const listing = await getListingById(params.slug, session?.userId || "");
+  const listing = {};
 
   return (
     <div>

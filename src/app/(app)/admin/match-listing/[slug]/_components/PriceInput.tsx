@@ -1,7 +1,7 @@
 "use client";
 
 import { UseFormReturn } from "react-hook-form";
-import { MatchListingFormValues } from "./MatchListingForm";
+import { MatchListingFormValues } from "@/types/listing.types";
 import { FC, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -25,7 +25,10 @@ const PriceInput: FC<PriceInputProps> = ({ form, value }) => {
           <Switch
             checked={exact}
             onCheckedChange={(checked) => {
-              form.setValue("price", "0");
+              if (!checked) {
+                form.setValue("minPrice", 0);
+                form.setValue("maxPrice", 0);
+              }
               setExact(checked);
             }}
           />
@@ -39,16 +42,18 @@ const PriceInput: FC<PriceInputProps> = ({ form, value }) => {
             max={1}
             step={0.05}
             onValueChange={(e) => {
-              form.setValue("price", e[0].toString());
+              const minPrice = parseFloat(value) - parseFloat(value) * e[0];
+              const maxPrice = parseFloat(value) + parseFloat(value) * e[0];
+              console.log(minPrice, maxPrice);
+              form.setValue("minPrice", minPrice);
+              form.setValue("maxPrice", maxPrice);
             }}
           />
-          <p className="text-sm text-gray-500 flex justify-center">
-            <span className="mx-auto">
-              {renderValueByPercentage(value, form.watch("price"), "sqft")}
-            </span>
-            <span>
-              {(parseFloat(form.watch("price")) * 100).toFixed(0) + " %"}
-            </span>
+          <p className="text-sm text-gray-500 text-center">
+            {form.watch("minPrice")?.toLocaleString() +
+              " - " +
+              form.watch("maxPrice")?.toLocaleString() +
+              " RM"}
           </p>
         </div>
       </div>

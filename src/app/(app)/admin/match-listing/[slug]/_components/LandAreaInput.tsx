@@ -1,7 +1,7 @@
 "use client";
 
 import { UseFormReturn } from "react-hook-form";
-import { MatchListingFormValues } from "./MatchListingForm";
+import { MatchListingFormValues } from "@/types/listing.types";
 import { FC, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -25,7 +25,10 @@ const LandAreaInput: FC<LandAreaInputProps> = ({ form, value }) => {
           <Switch
             checked={exact}
             onCheckedChange={(checked) => {
-              form.setValue("landArea", "0");
+              if (!checked) {
+                form.setValue("minLandArea", 0);
+                form.setValue("maxLandArea", 0);
+              }
               setExact(checked);
             }}
           />
@@ -39,16 +42,17 @@ const LandAreaInput: FC<LandAreaInputProps> = ({ form, value }) => {
             max={1}
             step={0.05}
             onValueChange={(e) => {
-              form.setValue("landArea", e[0].toString());
+              const minLandArea = parseFloat(value) - parseFloat(value) * e[0];
+              const maxLandArea = parseFloat(value) + parseFloat(value) * e[0];
+              form.setValue("minLandArea", minLandArea);
+              form.setValue("maxLandArea", maxLandArea);
             }}
           />
-          <p className="text-sm text-gray-500 flex justify-center">
-            <span className="mx-auto">
-              {renderValueByPercentage(value, form.watch("landArea"), "sqft")}
-            </span>
-            <span>
-              {(parseFloat(form.watch("landArea")) * 100).toFixed(0) + " %"}
-            </span>
+          <p className="text-sm text-gray-500 text-center">
+            {form.watch("minLandArea").toLocaleString() +
+              " - " +
+              form.watch("maxLandArea").toLocaleString() +
+              " sqft"}
           </p>
         </div>
       </div>

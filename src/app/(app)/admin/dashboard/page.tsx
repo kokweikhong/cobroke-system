@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import * as schema from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import { useEffect, useState } from "react";
-import { getListings } from "./actions";
+import { getListingsByUserId } from "@/actions/listing.actions";
 import FilterInput from "./_components/FilterInput";
 import Link from "next/link";
 
@@ -21,7 +21,7 @@ export default function Page() {
   const [listings, setListings] = useState<SelectListing[]>([]);
 
   async function fetchListings() {
-    const listings = await getListings(filter);
+    const listings = await getListingsByUserId(filter);
     console.log(listings);
     setListings(listings);
   }

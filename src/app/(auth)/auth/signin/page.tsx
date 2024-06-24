@@ -93,7 +93,7 @@ export default function Page() {
         <p className="text-center text-sm leading-6 text-gray-500">
           Not a member?{" "}
           <Link
-            href="#"
+            href="/auth/register"
             className="font-semibold text-primary hover:text-primary/90"
           >
             Start a 14-day free trial

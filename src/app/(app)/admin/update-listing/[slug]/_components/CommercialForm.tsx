@@ -1,0 +1,106 @@
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { furnishings, propertySubType } from "@/constants/listing.constants";
+import { UpdateListing } from "@/types/listing.types";
+import { FC } from "react";
+import { UseFormReturn } from "react-hook-form";
+
+type CommercialFormProps = {
+  form: UseFormReturn<UpdateListing>;
+};
+
+const CommercialForm: FC<CommercialFormProps> = ({ form }) => {
+  return (
+    <div className="space-y-4">
+      <FormField
+        control={form.control}
+        name="commercial.listingId"
+        defaultValue=""
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Listing ID</FormLabel>
+            <FormControl>
+              <Input
+                value={field.value as string}
+                onChange={field.onChange}
+                disabled
+              />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="commercial.propertySubType"
+        defaultValue=""
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Property Sub Type</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger className="capitalize">
+                  <SelectValue placeholder="Select a verified property sub type" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {propertySubType.commerical.map((subType) => (
+                  <SelectItem
+                    key={subType}
+                    value={subType}
+                    className="capitalize"
+                  >
+                    {subType}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="commercial.furnishing"
+        defaultValue=""
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Furnishing</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger className="capitalize">
+                  <SelectValue placeholder="Select a verified furnishing" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {furnishings.map((furnishing) => (
+                  <SelectItem
+                    key={furnishing}
+                    value={furnishing}
+                    className="capitalize"
+                  >
+                    {furnishing}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormItem>
+        )}
+      />
+    </div>
+  );
+};
+
+export default CommercialForm;

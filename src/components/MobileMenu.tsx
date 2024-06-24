@@ -9,16 +9,18 @@ import {
 import { MenuIcon } from "lucide-react";
 import logo from "../../public/logo.svg";
 import Image from "next/image";
+import UserCard from "./UserCard";
+import NavLinks from "./NavLinks";
 
 const MobileMenu = () => {
   return (
     <Sheet>
       <SheetTrigger>
-        <MenuIcon size="32" />
+        <MenuIcon size={20} />
       </SheetTrigger>
-      <SheetContent side={"left"}>
+      <SheetContent side={"left"} className="bg-adminBackground">
         <SheetHeader>
-          <SheetTitle>
+          <SheetTitle className="mb-4">
             <Image
               src={logo}
               alt="Logo"
@@ -27,11 +29,14 @@ const MobileMenu = () => {
               className="w-auto h-8 object-cover mx-auto"
             />
           </SheetTitle>
-          <SheetDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </SheetDescription>
+          <SheetDescription></SheetDescription>
+          <UserCard />
         </SheetHeader>
+        <div className="grow bg-white h-full mt-4 rounded-xl">
+          <div style={{ overflow: "visible" }} className="bg-white rounded-2xl">
+            <NavLinks />
+          </div>
+        </div>
       </SheetContent>
     </Sheet>
   );

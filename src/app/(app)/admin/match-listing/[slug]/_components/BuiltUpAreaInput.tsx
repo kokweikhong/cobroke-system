@@ -1,7 +1,7 @@
 "use client";
 
 import { UseFormReturn } from "react-hook-form";
-import { MatchListingFormValues } from "./MatchListingForm";
+import { MatchListingFormValues } from "@/types/listing.types";
 import { FC, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -25,7 +25,10 @@ const BuiltUpAreaInput: FC<BuiltUpAreaInputProps> = ({ form, value }) => {
           <Switch
             checked={exact}
             onCheckedChange={(checked) => {
-              form.setValue("builtUpArea", "0");
+              if (!checked) {
+                form.setValue("minBuiltUpArea", 0);
+                form.setValue("maxBuiltUpArea", 0);
+              }
               setExact(checked);
             }}
           />
@@ -39,20 +42,19 @@ const BuiltUpAreaInput: FC<BuiltUpAreaInputProps> = ({ form, value }) => {
             max={1}
             step={0.05}
             onValueChange={(e) => {
-              form.setValue("builtUpArea", e[0].toString());
+              const minBuiltUpArea =
+                parseFloat(value) - parseFloat(value) * e[0];
+              const maxBuiltUpArea =
+                parseFloat(value) + parseFloat(value) * e[0];
+              form.setValue("minBuiltUpArea", minBuiltUpArea);
+              form.setValue("maxBuiltUpArea", maxBuiltUpArea);
             }}
           />
-          <p className="text-sm text-gray-500 flex justify-center">
-            <span className="mx-auto">
-              {renderValueByPercentage(
-                value,
-                form.watch("builtUpArea"),
-                "sqft"
-              )}
-            </span>
-            <span>
-              {(parseFloat(form.watch("builtUpArea")) * 100).toFixed(0) + " %"}
-            </span>
+          <p className="text-sm text-gray-500 text-center">
+            {form.watch("minBuiltUpArea").toLocaleString() +
+              " - " +
+              form.watch("maxBuiltUpArea").toLocaleString() +
+              " sqft"}
           </p>
         </div>
       </div>
