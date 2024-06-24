@@ -1,6 +1,6 @@
 "use client";
 
-import { MatchListingFormValues } from "@/types/listing.types";
+import { MatchListingFormValues } from "@/types/listings";
 import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
 import ReactSlider from "react-slider";

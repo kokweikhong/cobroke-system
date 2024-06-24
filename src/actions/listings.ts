@@ -6,7 +6,7 @@ import { and, eq, gte, ilike, lte, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getAuthSession } from "./session";
-import { MatchListingFormValues } from "@/types/listing.types";
+import { ListingWithJoins, MatchListingFormValues } from "@/types/listings";
 import { getMinMaxValuesByPercentage } from "@/lib/utils";
 
 export async function createListing(formData: FormData) {
@@ -154,72 +154,83 @@ export async function getListingById(id: string, userId: string) {
     .leftJoin(schema.lands, eq(schema.lands.listingId, schema.listings.id))
     .limit(1);
 
-  return listing[0];
+  // return listing[0];
+  const data: ListingWithJoins = {
+    listings: listing[0].listings,
+    propertyAddresses: listing[0].property_addresses,
+    clients: listing[0].clients,
+    residentials: listing[0].residentials,
+    commercials: listing[0].commercials,
+    industrials: listing[0].industrials,
+    lands: listing[0].lands,
+  };
+
+  return data;
 }
 
-export async function getFilteredListings(filter: MatchListingFormValues) {
-  const listing = await db.query.listings.findFirst({
-    where: (listings, { eq, and }) =>
-      eq(listings.id, filter.listingId).if(filter.listingId !== ""),
-  });
-  if (!listing) {
-    throw new Error("Listing not found");
-  }
-  const landAreas = getMinMaxValuesByPercentage(
-    listing.landArea,
-    filter.landArea,
-    2
-  );
-  const builtUpAreas = getMinMaxValuesByPercentage(
-    listing.builtUpArea,
-    filter.builtUpArea,
-    2
-  );
-  const prices = getMinMaxValuesByPercentage(listing.price, filter.price, 2);
-  const listings = await db
-    .select()
-    .from(schema.listings)
-    .leftJoin(
-      schema.propertyAddresses,
-      eq(schema.propertyAddresses.listingId, schema.listings.id)
-    )
-    .where(
-      and(
-        sql`${filter.listingType} = '' OR listings.listingType ILIKE '%' || ${filter.listingType} || '%'`,
-        sql`${filter.propertyType} = '' OR listings.propertyType ILIKE '%' || ${filter.propertyType} || '%'`,
-        ilike(schema.listings.tenure, filter.tenure).if(filter.tenure !== ""),
-        ilike(schema.listings.propertyStatus, filter.propertyStatus).if(
-          filter.propertyStatus !== ""
-        ),
-        ilike(schema.listings.projectName, filter.projectName).if(
-          filter.projectName !== ""
-        ),
-        gte(schema.listings.landArea, landAreas[0].toFixed(2)).if(
-          filter.landArea !== "" && filter.landArea !== "0"
-        ),
-        lte(schema.listings.landArea, landAreas[1].toFixed(2)).if(
-          filter.landArea !== "" && filter.landArea !== "0"
-        ),
-        gte(schema.listings.builtUpArea, builtUpAreas[0].toFixed(2)).if(
-          filter.builtUpArea !== "" && filter.builtUpArea !== "0"
-        ),
-        lte(schema.listings.builtUpArea, builtUpAreas[1].toFixed(2)).if(
-          filter.builtUpArea !== "" && filter.builtUpArea !== "0"
-        ),
-        gte(schema.listings.price, prices[0].toFixed(2)).if(
-          filter.price !== "" && filter.price !== "0"
-        ),
-        lte(schema.listings.price, prices[1].toFixed(2)).if(
-          filter.price !== "" && filter.price !== "0"
-        ),
-        ilike(schema.propertyAddresses.city, filter.city).if(
-          filter.city !== ""
-        ),
-        ilike(schema.propertyAddresses.state, filter.state).if(
-          filter.state !== ""
-        )
-      )
-    );
+// export async function getFilteredListings(filter: MatchListingFormValues) {
+//   const listing = await db.query.listings.findFirst({
+//     where: (listings, { eq, and }) =>
+//       eq(listings.id, filter.listingId).if(filter.listingId !== ""),
+//   });
+//   if (!listing) {
+//     throw new Error("Listing not found");
+//   }
+//   const landAreas = getMinMaxValuesByPercentage(
+//     listing.landArea,
+//     filter.landArea,
+//     2
+//   );
+//   const builtUpAreas = getMinMaxValuesByPercentage(
+//     listing.builtUpArea,
+//     filter.builtUpArea,
+//     2
+//   );
+//   const prices = getMinMaxValuesByPercentage(listing.price, filter.price, 2);
+//   const listings = await db
+//     .select()
+//     .from(schema.listings)
+//     .leftJoin(
+//       schema.propertyAddresses,
+//       eq(schema.propertyAddresses.listingId, schema.listings.id)
+//     )
+//     .where(
+//       and(
+//         sql`${filter.listingType} = '' OR listings.listingType ILIKE '%' || ${filter.listingType} || '%'`,
+//         sql`${filter.propertyType} = '' OR listings.propertyType ILIKE '%' || ${filter.propertyType} || '%'`,
+//         ilike(schema.listings.tenure, filter.tenure).if(filter.tenure !== ""),
+//         ilike(schema.listings.propertyStatus, filter.propertyStatus).if(
+//           filter.propertyStatus !== ""
+//         ),
+//         ilike(schema.listings.projectName, filter.projectName).if(
+//           filter.projectName !== ""
+//         ),
+//         gte(schema.listings.landArea, landAreas[0].toFixed(2)).if(
+//           filter.landArea !== "" && filter.landArea !== "0"
+//         ),
+//         lte(schema.listings.landArea, landAreas[1].toFixed(2)).if(
+//           filter.landArea !== "" && filter.landArea !== "0"
+//         ),
+//         gte(schema.listings.builtUpArea, builtUpAreas[0].toFixed(2)).if(
+//           filter.builtUpArea !== "" && filter.builtUpArea !== "0"
+//         ),
+//         lte(schema.listings.builtUpArea, builtUpAreas[1].toFixed(2)).if(
+//           filter.builtUpArea !== "" && filter.builtUpArea !== "0"
+//         ),
+//         gte(schema.listings.price, prices[0].toFixed(2)).if(
+//           filter.price !== "" && filter.price !== "0"
+//         ),
+//         lte(schema.listings.price, prices[1].toFixed(2)).if(
+//           filter.price !== "" && filter.price !== "0"
+//         ),
+//         ilike(schema.propertyAddresses.city, filter.city).if(
+//           filter.city !== ""
+//         ),
+//         ilike(schema.propertyAddresses.state, filter.state).if(
+//           filter.state !== ""
+//         )
+//       )
+//     );
 
-  return listings;
-}
+//   return listings;
+// }

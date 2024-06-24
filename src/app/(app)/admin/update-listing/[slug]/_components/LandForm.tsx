@@ -13,7 +13,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { furnishings, propertySubType } from "@/constants/listing.constants";
-import { UpdateListing } from "@/types/listing.types";
+import { UpdateListing } from "@/types/listings";
 import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
 

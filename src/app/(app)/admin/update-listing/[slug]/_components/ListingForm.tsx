@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { UpdateListing } from "@/types/listing.types";
+import { UpdateListing } from "@/types/listings";
 import { FC } from "react";
 import { UseFormReturn, useForm } from "react-hook-form";
 import PropertyAddressForm from "./PropertyAddressForm";

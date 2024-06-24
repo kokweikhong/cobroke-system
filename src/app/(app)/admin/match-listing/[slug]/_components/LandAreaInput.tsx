@@ -1,7 +1,7 @@
 "use client";
 
 import { UseFormReturn } from "react-hook-form";
-import { MatchListingFormValues } from "@/types/listing.types";
+import { MatchListingFormValues } from "@/types/listings";
 import { FC, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";

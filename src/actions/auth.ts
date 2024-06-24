@@ -14,7 +14,6 @@ export async function signIn(prevState: any, formData: FormData) {
   const user = await db.query.users.findFirst({
     where: (user, { eq }) => eq(user.email, email),
   });
-  console.log("user found", user);
   if (!user) {
     return {
       message: "Invalid email",

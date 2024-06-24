@@ -11,7 +11,6 @@ type FilterInputProps = {
 const FilterInput: FC<FilterInputProps> = ({ setFilter, fetchListings }) => {
   return (
     <div>
-      {/* <form onSubmit={fetchListings}> */}
       <label htmlFor="filter" className="sr-only">
         Filter
       </label>
@@ -33,7 +32,6 @@ const FilterInput: FC<FilterInputProps> = ({ setFilter, fetchListings }) => {
           <SearchIcon size={20} />
         </button>
       </div>
-      {/* </form> */}
     </div>
   );
 };

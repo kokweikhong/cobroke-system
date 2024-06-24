@@ -1,18 +1,20 @@
 import { getAuthSession } from "@/actions/session";
-import MatchListingForm from "./_components/MatchListingForm";
-import { getListingById } from "@/actions/listing.actions";
+import ListingForm from "./_components/listing-form";
+import { getListingById } from "@/actions/listings";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const session = await getAuthSession();
-  // const listing = await getListingById(params.slug, session?.userId || "");
-  const listing = {};
+  console.log(params.slug, session?.userId);
+  const listing = await getListingById(params.slug, session?.userId || "");
+  // const listing = {};
+  console.log(listing);
 
   return (
     <div>
       <h1>Match Listing: {params.slug}</h1>
       <div>
-        <MatchListingForm
-          listing={listing as any}
+        <ListingForm
+          data={listing}
           // listing={
           //   {
           //     listingType: "wts",

@@ -63,6 +63,16 @@ export type SelectCommercial = InferSelectModel<typeof schema.commercials>;
 export type SelectIndustrial = InferSelectModel<typeof schema.industrials>;
 export type SelectLand = InferSelectModel<typeof schema.lands>;
 
+export type ListingWithJoins = {
+  listings: SelectListing;
+  propertyAddresses: SelectPropertyAddress | null;
+  clients: SelectClient | null;
+  residentials: SelectResidential | null;
+  commercials: SelectCommercial | null;
+  industrials: SelectIndustrial | null;
+  lands: SelectLand | null;
+};
+
 export type UpdateListing = {
   listing: SelectListing;
   propertyAddress: SelectPropertyAddress;

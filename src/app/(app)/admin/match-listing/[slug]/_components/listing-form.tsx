@@ -20,16 +20,17 @@ import { Slider } from "@/components/ui/slider";
 import LandAreaInput from "./LandAreaInput";
 import BuiltUpAreaInput from "./BuiltUpAreaInput";
 import PriceInput from "./PriceInput";
-import { MatchListingFormValues } from "@/types/listing.types";
+import { ListingWithJoins, MatchListingFormValues } from "@/types/listings";
 import ResidentialForm from "./ResidentialForm";
 
 type SelectListing = InferSelectModel<typeof schema.listings>;
 
-type MatchListingFormProps = {
-  listing: SelectListing;
+type ListingFormProps = {
+  data: ListingWithJoins;
 };
 
-const MatchListingForm: FC<MatchListingFormProps> = ({ listing }) => {
+const ListingForm: FC<ListingFormProps> = ({ data }) => {
+  const listing = data.listings;
   const form = useForm<MatchListingFormValues>({
     defaultValues: {
       minLandArea: 0,
@@ -56,7 +57,7 @@ const MatchListingForm: FC<MatchListingFormProps> = ({ listing }) => {
               control={form.control}
               name="listingType"
               defaultValue={
-                listing.listingType === "wtb"
+                data.listings.listingType === "wtb"
                   ? "wts"
                   : listing.listingType === "wts"
                   ? "wtb"
@@ -173,4 +174,4 @@ const MatchListingForm: FC<MatchListingFormProps> = ({ listing }) => {
   );
 };
 
-export default MatchListingForm;
+export default ListingForm;
