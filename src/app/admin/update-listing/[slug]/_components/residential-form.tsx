@@ -9,26 +9,25 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-import { addressStates } from "@/constants/listing.constants";
 import { ListingWithJoins } from "@/types/listings";
 import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
 
-type AddressFormProps = {
+type ResidentialFormProps = {
   form: UseFormReturn<ListingWithJoins>;
 };
 
-const AddressForm: FC<AddressFormProps> = ({ form }) => {
+const ResidentialForm: FC<ResidentialFormProps> = ({ form }) => {
   return (
     <div className="space-y-4">
       <FormField
         control={form.control}
-        name="propertyAddresses.id"
+        name="residentials.id"
         defaultValue={0}
         render={({ field }) => (
           <FormItem>
@@ -42,13 +41,13 @@ const AddressForm: FC<AddressFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="propertyAddresses.addressLine1"
+        name="residentials.propertySubType"
         defaultValue=""
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Address Line 1</FormLabel>
+            <FormLabel>Property Sub Type</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Enter property address 1" />
+              <Input {...field} />
             </FormControl>
           </FormItem>
         )}
@@ -56,13 +55,20 @@ const AddressForm: FC<AddressFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="propertyAddresses.addressLine2"
-        defaultValue=""
+        name="residentials.bedrooms"
+        defaultValue={0}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Address Line 2</FormLabel>
+            <FormLabel>Bedrooms</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Enter property address 2" />
+              <Input
+                type="number"
+                step={1}
+                value={field.value}
+                onChange={(e) => {
+                  field.onChange(parseInt(e.target.value));
+                }}
+              />
             </FormControl>
           </FormItem>
         )}
@@ -70,13 +76,21 @@ const AddressForm: FC<AddressFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="propertyAddresses.postalCode"
-        defaultValue=""
+        name="residentials.bathrooms"
+        defaultValue={0}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Postal Code</FormLabel>
+            <FormLabel>Bathrooms</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Enter property postal code" />
+              <Input
+                type="number"
+                step={1}
+                {...field}
+                value={field.value}
+                onChange={(e) => {
+                  field.onChange(parseInt(e.target.value));
+                }}
+              />
             </FormControl>
           </FormItem>
         )}
@@ -84,13 +98,21 @@ const AddressForm: FC<AddressFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="propertyAddresses.city"
-        defaultValue=""
+        name="residentials.carParks"
+        defaultValue={0}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>City</FormLabel>
+            <FormLabel>Car Parks</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Enter property city" />
+              <Input
+                type="number"
+                step={1}
+                {...field}
+                value={field.value}
+                onChange={(e) => {
+                  field.onChange(parseInt(e.target.value));
+                }}
+              />
             </FormControl>
           </FormItem>
         )}
@@ -98,23 +120,21 @@ const AddressForm: FC<AddressFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="propertyAddresses.state"
-        defaultValue="kuala lumpur"
+        name="residentials.furnishing"
+        defaultValue=""
         render={({ field }) => (
           <FormItem>
-            <FormLabel>State</FormLabel>
+            <FormLabel>Furnishing</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="capitalize">
-                  <SelectValue placeholder="Select a verified property state" />
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a verified furnishing" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {addressStates.map((state) => (
-                  <SelectItem key={state} value={state} className="capitalize">
-                    {state}
-                  </SelectItem>
-                ))}
+                <SelectItem value="fully">Fully Furnished</SelectItem>
+                <SelectItem value="partially">Partially Furnished</SelectItem>
+                <SelectItem value="unfurnished">Unfurnished</SelectItem>
               </SelectContent>
             </Select>
           </FormItem>
@@ -124,4 +144,4 @@ const AddressForm: FC<AddressFormProps> = ({ form }) => {
   );
 };
 
-export default AddressForm;
+export default ResidentialForm;

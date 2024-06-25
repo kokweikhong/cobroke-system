@@ -1,3 +1,5 @@
+"use client";
+
 import {
   FormControl,
   FormField,
@@ -7,18 +9,22 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-import { furnishings, propertySubType } from "@/constants/listing.constants";
-import { UpdateListing } from "@/types/listings";
+import {
+  furnishings,
+  landReserves,
+  landStatues,
+} from "@/constants/listing.constants";
+import { ListingWithJoins } from "@/types/listings";
 import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
 
 type LandFormProps = {
-  form: UseFormReturn<UpdateListing>;
+  form: UseFormReturn<ListingWithJoins>;
 };
 
 const LandForm: FC<LandFormProps> = ({ form }) => {
@@ -26,17 +32,13 @@ const LandForm: FC<LandFormProps> = ({ form }) => {
     <div className="space-y-4">
       <FormField
         control={form.control}
-        name="land.listingId"
-        defaultValue=""
+        name="lands.id"
+        defaultValue={0}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Listing ID</FormLabel>
+            <FormLabel>ID</FormLabel>
             <FormControl>
-              <Input
-                value={field.value as string}
-                onChange={field.onChange}
-                disabled
-              />
+              <Input {...field} disabled />
             </FormControl>
           </FormItem>
         )}
@@ -44,25 +46,39 @@ const LandForm: FC<LandFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="land.propertySubType"
+        name="lands.propertySubType"
         defaultValue=""
         render={({ field }) => (
           <FormItem>
             <FormLabel>Property Sub Type</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="lands.status"
+        defaultValue=""
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Status</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger className="capitalize">
-                  <SelectValue placeholder="Select a verified property sub type" />
+                  <SelectValue />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {propertySubType.land.map((subType) => (
+                {landStatues.map((status) => (
                   <SelectItem
-                    key={subType}
-                    value={subType}
+                    key={status}
+                    value={status}
                     className="capitalize"
                   >
-                    {subType}
+                    {status}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -73,25 +89,25 @@ const LandForm: FC<LandFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="land.status"
+        name="lands.reserve"
         defaultValue=""
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Status</FormLabel>
+            <FormLabel>Reserve</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger className="capitalize">
-                  <SelectValue placeholder="Select a verified status" />
+                  <SelectValue />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {propertySubType.land.map((subType) => (
+                {landReserves.map((reserve) => (
                   <SelectItem
-                    key={subType}
-                    value={subType}
+                    key={reserve}
+                    value={reserve}
                     className="capitalize"
                   >
-                    {subType}
+                    {reserve}
                   </SelectItem>
                 ))}
               </SelectContent>

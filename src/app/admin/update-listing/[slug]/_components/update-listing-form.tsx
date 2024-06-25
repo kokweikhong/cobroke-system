@@ -9,6 +9,10 @@ import { useForm } from "react-hook-form";
 import ListingForm from "./listing-form";
 import AddressForm from "./address-form";
 import ClientForm from "./client-form";
+import ResidentialForm from "./residential-form";
+import CommercialForm from "./commercial-form";
+import IndustrialForm from "./industrial-form";
+import LandForm from "./land-form";
 
 type UpdateListingFormProps = {
   data: ListingWithJoins;
@@ -30,6 +34,18 @@ const UpdateListingForm: FC<UpdateListingFormProps> = ({ data }) => {
       <div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <Button type="submit">Update</Button>
+              <Button
+                type="button"
+                variant={"destructive"}
+                onClick={() => {
+                  console.log("delete");
+                }}
+              >
+                Delete
+              </Button>
+            </div>
             <Tabs defaultValue="listing" className="w-auto">
               <TabsList className="flex flex-wrap gap-2 py-4 h-auto">
                 <TabsTrigger value="listing">Listing</TabsTrigger>
@@ -49,11 +65,19 @@ const UpdateListingForm: FC<UpdateListingFormProps> = ({ data }) => {
               <TabsContent value="client">
                 <ClientForm form={form} />
               </TabsContent>
+              <TabsContent value="residential">
+                <ResidentialForm form={form} />
+              </TabsContent>
+              <TabsContent value="commercial">
+                <CommercialForm form={form} />
+              </TabsContent>
+              <TabsContent value="industrial">
+                <IndustrialForm form={form} />
+              </TabsContent>
+              <TabsContent value="land">
+                <LandForm form={form} />
+              </TabsContent>
             </Tabs>
-
-            <div>
-              <Button type="submit">Submit</Button>
-            </div>
           </form>
         </Form>
       </div>

@@ -9,26 +9,25 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-import { addressStates } from "@/constants/listing.constants";
 import { ListingWithJoins } from "@/types/listings";
 import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
 
-type AddressFormProps = {
+type IndustrialFormProps = {
   form: UseFormReturn<ListingWithJoins>;
 };
 
-const AddressForm: FC<AddressFormProps> = ({ form }) => {
+const IndustrialForm: FC<IndustrialFormProps> = ({ form }) => {
   return (
     <div className="space-y-4">
       <FormField
         control={form.control}
-        name="propertyAddresses.id"
+        name="industrials.id"
         defaultValue={0}
         render={({ field }) => (
           <FormItem>
@@ -42,13 +41,13 @@ const AddressForm: FC<AddressFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="propertyAddresses.addressLine1"
+        name="industrials.propertySubType"
         defaultValue=""
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Address Line 1</FormLabel>
+            <FormLabel>Property Sub Type</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Enter property address 1" />
+              <Input {...field} />
             </FormControl>
           </FormItem>
         )}
@@ -56,13 +55,13 @@ const AddressForm: FC<AddressFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="propertyAddresses.addressLine2"
-        defaultValue=""
+        name="industrials.floorLoading"
+        defaultValue={"0"}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Address Line 2</FormLabel>
+            <FormLabel>Floor Loading (KN)</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Enter property address 2" />
+              <Input type="number" step={0.01} {...field} />
             </FormControl>
           </FormItem>
         )}
@@ -70,13 +69,13 @@ const AddressForm: FC<AddressFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="propertyAddresses.postalCode"
-        defaultValue=""
+        name="industrials.eavesHeight"
+        defaultValue={"0"}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Postal Code</FormLabel>
+            <FormLabel>Eaves Height</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Enter property postal code" />
+              <Input type="number" step={0.01} {...field} />
             </FormControl>
           </FormItem>
         )}
@@ -84,13 +83,13 @@ const AddressForm: FC<AddressFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="propertyAddresses.city"
-        defaultValue=""
+        name="industrials.powerSupply"
+        defaultValue={"0"}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>City</FormLabel>
+            <FormLabel>Power Supply (Amp)</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Enter property city" />
+              <Input type="number" step={1} {...field} />
             </FormControl>
           </FormItem>
         )}
@@ -98,25 +97,44 @@ const AddressForm: FC<AddressFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="propertyAddresses.state"
-        defaultValue="kuala lumpur"
+        name="industrials.usage"
+        defaultValue=""
         render={({ field }) => (
           <FormItem>
-            <FormLabel>State</FormLabel>
+            <FormLabel>Usage</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="capitalize">
-                  <SelectValue placeholder="Select a verified property state" />
+                <SelectTrigger>
+                  <SelectValue />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {addressStates.map((state) => (
-                  <SelectItem key={state} value={state} className="capitalize">
-                    {state}
-                  </SelectItem>
-                ))}
+                <SelectItem value="fully">Fully Furnished</SelectItem>
+                <SelectItem value="partially">Partially Furnished</SelectItem>
+                <SelectItem value="unfurnished">Unfurnished</SelectItem>
               </SelectContent>
             </Select>
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="industrials.isGasSupply"
+        defaultValue={false}
+        render={({ field }) => (
+          <FormItem className="flex items-center space-x-2 justify-start">
+            <FormControl>
+              <Input
+                type="checkbox"
+                className="h-5 w-5"
+                checked={field.value}
+                onChange={(e) => {
+                  field.onChange(e.target.checked);
+                }}
+              />
+            </FormControl>
+            <FormLabel className="!mt-0">Gas Supply</FormLabel>
           </FormItem>
         )}
       />
@@ -124,4 +142,4 @@ const AddressForm: FC<AddressFormProps> = ({ form }) => {
   );
 };
 
-export default AddressForm;
+export default IndustrialForm;

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   FormControl,
   FormField,
@@ -7,18 +9,18 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-import { furnishings, propertySubType } from "@/constants/listing.constants";
-import { UpdateListing } from "@/types/listings";
+import { furnishings } from "@/constants/listing.constants";
+import { ListingWithJoins } from "@/types/listings";
 import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
 
 type CommercialFormProps = {
-  form: UseFormReturn<UpdateListing>;
+  form: UseFormReturn<ListingWithJoins>;
 };
 
 const CommercialForm: FC<CommercialFormProps> = ({ form }) => {
@@ -26,17 +28,13 @@ const CommercialForm: FC<CommercialFormProps> = ({ form }) => {
     <div className="space-y-4">
       <FormField
         control={form.control}
-        name="commercial.listingId"
-        defaultValue=""
+        name="commercials.id"
+        defaultValue={0}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Listing ID</FormLabel>
+            <FormLabel>ID</FormLabel>
             <FormControl>
-              <Input
-                value={field.value as string}
-                onChange={field.onChange}
-                disabled
-              />
+              <Input {...field} disabled />
             </FormControl>
           </FormItem>
         )}
@@ -44,36 +42,21 @@ const CommercialForm: FC<CommercialFormProps> = ({ form }) => {
 
       <FormField
         control={form.control}
-        name="commercial.propertySubType"
+        name="commercials.propertySubType"
         defaultValue=""
         render={({ field }) => (
           <FormItem>
             <FormLabel>Property Sub Type</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <FormControl>
-                <SelectTrigger className="capitalize">
-                  <SelectValue placeholder="Select a verified property sub type" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {propertySubType.commerical.map((subType) => (
-                  <SelectItem
-                    key={subType}
-                    value={subType}
-                    className="capitalize"
-                  >
-                    {subType}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
           </FormItem>
         )}
       />
 
       <FormField
         control={form.control}
-        name="commercial.furnishing"
+        name="commercials.furnishing"
         defaultValue=""
         render={({ field }) => (
           <FormItem>
