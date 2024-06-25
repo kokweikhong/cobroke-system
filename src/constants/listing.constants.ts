@@ -39,3 +39,10 @@ export const furnishings = [
 export const landStatues = ["converted", "non-converted"];
 
 export const landReserves = ["malay", "non-malay"];
+
+export const propertyTypes = [
+  "residential",
+  "commercial",
+  "industrial",
+  "land",
+];

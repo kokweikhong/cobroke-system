@@ -14,9 +14,6 @@ export type MatchListingFormValues = {
   maxBuiltUpArea: number;
   minPrice: number;
   maxPrice: number;
-  // landArea: string;
-  // builtUpArea: string;
-  // price: string;
   address: {
     city: string;
     state: string;
