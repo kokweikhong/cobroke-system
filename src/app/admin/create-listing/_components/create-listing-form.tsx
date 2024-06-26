@@ -22,8 +22,7 @@ import * as schema from "@/db/schema";
 import { toast } from "sonner";
 import { createListing } from "@/actions/listings";
 import { FC } from "react";
-
-type InsertListing = InferInsertModel<typeof schema.listings>;
+import type { InsertListing } from "@/types/listings";
 
 type CreateListingFormProps = Readonly<{
   userId: string;
@@ -36,17 +35,9 @@ const CreateListingForm: FC<CreateListingFormProps> = ({ userId }) => {
       action: {
         label: "Yes",
         onClick: async () => {
-          const formData = new FormData();
-          formData.append("userId", data.userId);
-          formData.append("listingType", data.listingType as string);
-          formData.append("listingCategory", data.listingCategory as string);
-          formData.append("propertyType", data.propertyType as string);
-          formData.append("projectName", data.projectName as string);
-          formData.append("tenure", data.tenure as string);
-          formData.append("propertyStatus", data.propertyStatus as string);
-          formData.append("description", data.description as string);
           try {
-            await createListing(formData);
+            // TODO: Create listing
+            await createListing(data);
             toast.success("Listing created successfully");
           } catch (error) {
             toast.error("Failed to create listing");

@@ -13,35 +13,79 @@ import ResidentialForm from "./residential-form";
 import CommercialForm from "./commercial-form";
 import IndustrialForm from "./industrial-form";
 import LandForm from "./land-form";
+import { deleteListing, updateListing } from "@/actions/listings";
+import { toast } from "sonner";
 
 type UpdateListingFormProps = {
   data: ListingWithJoins;
+  listingId: string;
 };
 
-const UpdateListingForm: FC<UpdateListingFormProps> = ({ data }) => {
+const UpdateListingForm: FC<UpdateListingFormProps> = ({ data, listingId }) => {
   const form = useForm<ListingWithJoins>({
     defaultValues: data,
   });
 
-  function onSubmit(values: ListingWithJoins) {
-    console.log(values);
+  // TODO: Implement update listing
+  async function handleSubmit(data: ListingWithJoins) {
+    toast("Are you sure you want to update this listing?", {
+      action: {
+        label: "Yes",
+        onClick: async () => {
+          try {
+            await updateListing(data);
+            toast.success("Listing updated successfully");
+          } catch (error) {
+            toast.error("Failed to update listing");
+          }
+        },
+      },
+      cancel: {
+        label: "No",
+        onClick: () => {
+          toast.dismiss();
+        },
+      },
+    });
   }
+
+  // TODO: Implement delete listing
+  async function handleDelete() {
+    toast("Are you sure you want to delete this listing?", {
+      action: {
+        label: "Delete",
+        onClick: async () => {
+          try {
+            await deleteListing(listingId);
+            toast.success("Listing deleted successfully");
+          } catch (error) {
+            toast.error("Failed to delete listing");
+          }
+        },
+      },
+      cancel: {
+        label: "Cancel",
+        onClick: () => {
+          toast.dismiss();
+        },
+      },
+    });
+  }
+
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Update Listing</h1>
-      </div>
       <div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <div className="flex items-center space-x-2">
               <Button type="submit">Update</Button>
               <Button
                 type="button"
                 variant={"destructive"}
-                onClick={() => {
-                  console.log("delete");
-                }}
+                onClick={handleDelete}
               >
                 Delete
               </Button>

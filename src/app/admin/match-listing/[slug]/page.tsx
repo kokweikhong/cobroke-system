@@ -1,11 +1,12 @@
 import { getAuthSession } from "@/actions/session";
 import { getListingById } from "@/actions/listings";
 import { generateMockListingsWithJoin } from "@/mocks/listings";
-import MatchingForm from "./_components/matching.form";
+import MatchingTabs from "./_components/matching-tabs";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const session = await getAuthSession();
   console.log(params.slug, session?.userId);
+  // TODO: Fetch listing by ID
   // const listing = await getListingById(params.slug, session?.userId || "");
   // const listing = {};
   const listings = generateMockListingsWithJoin("1");
@@ -20,7 +21,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </h1>
       </div>
       <div>
-        <MatchingForm data={listing && (listing as any)} />
+        <MatchingTabs data={listing && (listing as any)} />
       </div>
     </div>
   );

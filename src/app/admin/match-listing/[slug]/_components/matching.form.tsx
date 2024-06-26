@@ -5,7 +5,11 @@ import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ListingWithJoins, MatchListingFormValues } from "@/types/listings";
+import {
+  ExportListing,
+  ListingWithJoins,
+  MatchListingFormValues,
+} from "@/types/listings";
 import ResidentialForm from "./residential-form";
 import CommercialForm from "./commercial-form";
 import IndustrialForm from "./industrial-form";
@@ -14,12 +18,15 @@ import { getOppositeListingType } from "@/lib/listing-type";
 import ListingForm from "./listing-form";
 import { getFilteredListings } from "@/actions/listings";
 import { toast } from "sonner";
+import { generateMockListingsWithJoin } from "@/mocks/listings";
+import { convertListingWithJoinsToExportListing } from "@/lib/listings";
 
 type MatchingFormProps = {
   data: ListingWithJoins;
+  setResult: (result: ExportListing[]) => void;
 };
 
-const MatchingForm: FC<MatchingFormProps> = ({ data }) => {
+const MatchingForm: FC<MatchingFormProps> = ({ data, setResult }) => {
   const listing = data.listings;
   const formDefaultValues: MatchListingFormValues = {
     listingId: data.listings.id,
@@ -79,8 +86,13 @@ const MatchingForm: FC<MatchingFormProps> = ({ data }) => {
       action: {
         label: "Match",
         onClick: async () => {
-          const listings = await getFilteredListings(values);
-          console.log(listings);
+          // TODO: Match listing
+          // const listings = await getFilteredListings(values);
+          const listings = generateMockListingsWithJoin("23432432");
+          const exportListings = listings.map((listing) =>
+            convertListingWithJoinsToExportListing(listing)
+          );
+          setResult(exportListings);
         },
       },
     });

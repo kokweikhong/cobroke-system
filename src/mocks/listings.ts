@@ -23,6 +23,20 @@ export function generateMockListingsWithJoin(
       listings: listing,
       clients: client || null,
       propertyAddresses: address || null,
+      users: {
+        id: userId,
+        email: "admin@cobrokesystem.com",
+        firstName: "Admin",
+        lastName: "User",
+        contactNumber: "0123456789",
+        role: "admin",
+        isActive: true,
+        isApproved: true,
+        isVerified: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        password: "cobroke",
+      },
       residentials:
         listing.propertyType === "residential"
           ? generateMockResidentials([listing.id])[0]

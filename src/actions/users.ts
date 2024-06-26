@@ -1,10 +1,12 @@
 "use server";
 
 import db from "@/db";
-import { users } from "@/db/schema";
+import * as schema from "@/db/schema";
 import { revalidatePath } from "next/cache";
 import { hashPassword } from "@/lib/password";
 import { eq } from "drizzle-orm";
+import { InserUser } from "@/types/user.types";
+import { redirect } from "next/navigation";
 
 export async function createUser(formData: FormData) {
   const password = formData.get("password") as string;
@@ -18,13 +20,49 @@ export async function createUser(formData: FormData) {
     console.error("Error hashing password:", error);
     return;
   }
-  await db.insert(users).values(formData as any);
+  await db.insert(schema.users).values(formData as any);
 
   revalidatePath("/");
 }
 
+export async function createUsers(users: InserUser[]) {
+  await db.insert(schema.users).values(users);
+
+  revalidatePath("/");
+  redirect("/admin/users");
+}
+
+export async function updateUser(formData: FormData) {
+  const id = formData.get("id") as string;
+  const password = formData.get("password") as string;
+  if (password) {
+    try {
+      const hashedPassword = await hashPassword(password);
+      if (!hashedPassword) {
+        return;
+      }
+      formData.set("password", hashedPassword);
+    } catch (error) {
+      console.error("Error hashing password:", error);
+      return;
+    }
+  } else {
+    formData.delete("password");
+  }
+  await db
+    .update(schema.users)
+    .set(formData as any)
+    .where(eq(schema.users.id, id));
+
+  revalidatePath("/");
+  redirect("/admin/users");
+}
+
 export async function updateUserActiveStatus(id: string, isActive: boolean) {
-  await db.update(users).set({ isActive: isActive }).where(eq(users.id, id));
+  await db
+    .update(schema.users)
+    .set({ isActive: isActive })
+    .where(eq(schema.users.id, id));
 
   revalidatePath("/");
 }
@@ -34,9 +72,9 @@ export async function updateUserApprovalStatus(
   isApproved: boolean
 ) {
   await db
-    .update(users)
+    .update(schema.users)
     .set({ isApproved: isApproved })
-    .where(eq(users.id, id));
+    .where(eq(schema.users.id, id));
 
   revalidatePath("/");
 }
@@ -46,9 +84,9 @@ export async function updateUserVerificationStatus(
   isVerified: boolean
 ) {
   await db
-    .update(users)
+    .update(schema.users)
     .set({ isVerified: isVerified })
-    .where(eq(users.id, id));
+    .where(eq(schema.users.id, id));
 
   revalidatePath("/");
 }

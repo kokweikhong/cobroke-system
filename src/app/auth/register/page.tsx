@@ -22,11 +22,12 @@ import {
 import logo from "@/../public/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { createUser } from "@/actions/user.actions";
+import { createUser } from "@/actions/users";
 
 type InsertUser = InferInsertModel<typeof schema.users>;
 
 export default function Page() {
+  // TODO: Implement create user
   const form = useForm<InsertUser>();
   return (
     <div className="mt-10 min-h-full flex flex-col items-center justify-center max-w-3xl mx-auto px-4">

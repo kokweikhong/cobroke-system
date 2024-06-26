@@ -19,10 +19,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createUser } from "@/actions/users";
 
 type InsertUser = InferInsertModel<typeof schema.users>;
 
 export default function Page() {
+  // TODO: Implement create user
   const form = useForm<InsertUser>();
   return (
     <div>
@@ -31,7 +33,7 @@ export default function Page() {
       </div>
       <div className="max-w-md">
         <Form {...form}>
-          <form action="" className="space-y-4">
+          <form action={createUser} className="space-y-4">
             <FormField
               control={form.control}
               name="firstName"

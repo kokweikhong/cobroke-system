@@ -9,30 +9,13 @@ import { getAuthSession } from "./session";
 import { ListingWithJoins, MatchListingFormValues } from "@/types/listings";
 import { getMinMaxValuesByPercentage } from "@/lib/utils";
 import { validateNumber, validateValue } from "@/lib/validations";
+import type { InsertListing } from "@/types/listings";
 
-export async function createListing(formData: FormData) {
-  const listings = await db
-    .insert(schema.listings)
-    .values({
-      userId: formData.get("userId") as string,
-      projectName: formData.get("projectName") as string,
-      listingType: formData.get("listingType") as any,
-      listingCategory: formData.get("listingCategory") as any,
-      propertyType: formData.get("propertyType") as any,
-      tenure: formData.get("tenure") as string,
-      propertyStatus: formData.get("propertyStatus") as string,
-      landArea: "0.00" as any,
-      builtUpArea: "0.00" as any,
-      price: "0.00" as any,
-      currentRental: "0.00" as any,
-      description: formData.get("description") as string,
-      isActive: false,
-      isAvailable: false,
-    })
-    .returning({
-      id: schema.listings.id,
-      propertyType: schema.listings.propertyType,
-    });
+export async function createListing(data: InsertListing) {
+  const listings = await db.insert(schema.listings).values(data).returning({
+    id: schema.listings.id,
+    propertyType: schema.listings.propertyType,
+  });
   const listing = listings[0];
   await db.insert(schema.propertyAddresses).values({
     listingId: listing.id,
@@ -90,20 +73,80 @@ export async function createListing(formData: FormData) {
   redirect("/admin/dashboard");
 }
 
-export async function updateListing(formData: FormData) {
-  const listingId = formData.get("listingId") as string;
+export async function updateListing(data: ListingWithJoins) {
+  // const data = Object.fromEntries(formData.entries());
+  console.log(data);
+  const listingId = data.listings.id;
   await db
     .update(schema.listings)
     .set({
-      projectName: formData.get("projectName") as string,
-      listingType: formData.get("listingType") as any,
-      listingCategory: formData.get("listingCategory") as any,
-      propertyType: formData.get("propertyType") as any,
-      tenure: formData.get("tenure") as string,
-      propertyStatus: formData.get("propertyStatus") as string,
-      description: formData.get("description") as string,
+      projectName: data.listings.projectName,
+      listingType: data.listings.listingType,
+      listingCategory: data.listings.listingCategory,
+      propertyType: data.listings.propertyType,
+      tenure: data.listings.tenure,
+      propertyStatus: data.listings.propertyStatus,
+      description: data.listings.description,
+      landArea: data.listings.landArea,
+      builtUpArea: data.listings.builtUpArea,
+      price: data.listings.price,
+      currentRental: data.listings.currentRental,
+      isAvailable: data.listings.isAvailable,
     })
     .where(eq(schema.listings.id, listingId));
+  await db
+    .update(schema.propertyAddresses)
+    .set({
+      addressLine1: data.propertyAddresses?.addressLine1,
+      addressLine2: data.propertyAddresses?.addressLine2,
+      city: data.propertyAddresses?.city,
+      state: data.propertyAddresses?.state!!,
+      postalCode: data.propertyAddresses?.postalCode,
+    })
+    .where(eq(schema.propertyAddresses.listingId, listingId));
+  await db.update(schema.clients).set({
+    name: data.clients?.name,
+    contactNumber: data.clients?.contactNumber,
+    email: data.clients?.email,
+  });
+
+  switch (data.listings.propertyType) {
+    case "residential":
+      await db.update(schema.residentials).set({
+        propertySubType: data.residentials?.propertySubType,
+        bedrooms: data.residentials?.bedrooms,
+        bathrooms: data.residentials?.bathrooms,
+        carParks: data.residentials?.carParks,
+        furnishing: data.residentials?.furnishing,
+      });
+      break;
+    case "commercial":
+      await db.update(schema.commercials).set({
+        propertySubType: data.commercials?.propertySubType,
+        furnishing: data.commercials?.furnishing,
+      });
+      break;
+    case "industrial":
+      await db.update(schema.industrials).set({
+        propertySubType: data.industrials?.propertySubType,
+        floorLoading: data.industrials?.floorLoading,
+        eavesHeight: data.industrials?.eavesHeight,
+        powerSupply: data.industrials?.powerSupply,
+        isGasSupply: data.industrials?.isGasSupply,
+        usage: data.industrials?.usage,
+      });
+      break;
+    case "land":
+      await db.update(schema.lands).set({
+        propertySubType: data.lands?.propertySubType,
+        status: data.lands?.status,
+        reserve: data.lands?.reserve,
+      });
+      break;
+    default:
+      throw new Error("Invalid property type");
+  }
+
   await updateListingStatus(listingId);
   revalidatePath("/admin/dashboard");
   redirect("/admin/dashboard");
@@ -199,6 +242,7 @@ export async function getListingById(id: string, userId: string) {
     .select()
     .from(schema.listings)
     .where(and(eq(schema.listings.id, id), eq(schema.listings.userId, userId)))
+    .leftJoin(schema.users, eq(schema.users.id, schema.listings.userId))
     .leftJoin(
       schema.propertyAddresses,
       eq(schema.propertyAddresses.listingId, schema.listings.id)
@@ -224,6 +268,7 @@ export async function getListingById(id: string, userId: string) {
     listings: listing[0].listings,
     propertyAddresses: listing[0].property_addresses,
     clients: listing[0].clients,
+    users: listing[0].users,
     residentials: listing[0].residentials,
     commercials: listing[0].commercials,
     industrials: listing[0].industrials,
@@ -263,6 +308,7 @@ export async function getFilteredListings(filter: MatchListingFormValues) {
       eq(schema.industrials.listingId, schema.listings.id)
     )
     .leftJoin(schema.lands, eq(schema.lands.listingId, schema.listings.id))
+    .leftJoin(schema.users, eq(schema.users.id, schema.listings.userId))
     .where(
       and(
         sql`${filter.listingType} = '' OR listings.listingType ILIKE '%' || ${filter.listingType} || '%'`,
@@ -433,5 +479,25 @@ export async function getFilteredListings(filter: MatchListingFormValues) {
       )
     );
 
-  return listings;
+  const data: ListingWithJoins[] = [];
+  for (const item of listings) {
+    data.push({
+      listings: item.listings,
+      propertyAddresses: item.property_addresses,
+      clients: item.clients,
+      users: item.users,
+      residentials: item.residentials,
+      commercials: item.commercials,
+      industrials: item.industrials,
+      lands: item.lands,
+    });
+  }
+
+  return data;
+}
+
+export async function deleteListing(id: string) {
+  await db.delete(schema.listings).where(eq(schema.listings.id, id));
+  revalidatePath("/admin/dashboard");
+  redirect("/admin/dashboard");
 }

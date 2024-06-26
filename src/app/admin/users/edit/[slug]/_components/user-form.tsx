@@ -20,13 +20,35 @@ import {
 import { Button } from "@/components/ui/button";
 import { userRoles } from "@/constants/user.constants";
 import { Switch } from "@/components/ui/switch";
+import { updateUser } from "@/actions/users";
+import { FC } from "react";
 
-const UserForm = () => {
-  const form = useForm<SelectUser>();
+type UserFormProps = {
+  data: SelectUser;
+};
+
+const UserForm: FC<UserFormProps> = ({ data }) => {
+  const form = useForm<SelectUser>({
+    defaultValues: data,
+  });
   return (
     <div>
       <Form {...form}>
-        <form className="space-y-4">
+        <form action={updateUser} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="id"
+            defaultValue=""
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>ID</FormLabel>
+                <FormControl>
+                  <Input {...field} disabled />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="firstName"
@@ -64,6 +86,20 @@ const UserForm = () => {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input type="email" {...field} disabled />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="password"
+            defaultValue=""
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -115,7 +151,7 @@ const UserForm = () => {
             )}
           />
 
-          <div className="space-y-4">
+          <div className="space-y-6 !mt-8">
             <FormField
               control={form.control}
               name="isActive"
@@ -151,6 +187,7 @@ const UserForm = () => {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="isApproved"
@@ -170,10 +207,10 @@ const UserForm = () => {
             />
           </div>
 
-          <div>
+          <div className="flex justify-end">
             <Button
               type="submit"
-              className="w-full py-2 px-4 bg-primary text-white rounded-md"
+              className="py-2 px-4 bg-primary text-white rounded-md"
             >
               Save
             </Button>

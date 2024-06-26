@@ -12,6 +12,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/auth/signin", request.url));
   }
 
+  if (pathname === "/admin/users" && session.role !== "superadmin") {
+    const errorMessage =
+      "Unauthorized, you must be a superadmin to access this page";
+    return NextResponse.redirect(
+      new URL(`/auth/signin?message=${errorMessage}`, request.url)
+    );
+  }
+
   return NextResponse.next();
 }
 

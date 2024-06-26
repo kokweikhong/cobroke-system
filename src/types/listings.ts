@@ -1,5 +1,7 @@
-import { InferSelectModel } from "drizzle-orm";
+import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import * as schema from "@/db/schema";
+
+export type SelectUser = InferSelectModel<typeof schema.users>;
 
 export type MatchListingFormValues = {
   listingId: string;
@@ -64,6 +66,7 @@ export type ListingWithJoins = {
   listings: SelectListing;
   propertyAddresses: SelectPropertyAddress | null;
   clients: SelectClient | null;
+  users: SelectUser | null;
   residentials: SelectResidential | null;
   commercials: SelectCommercial | null;
   industrials: SelectIndustrial | null;
@@ -79,3 +82,54 @@ export type UpdateListing = {
   industrial?: SelectIndustrial;
   land?: SelectLand;
 };
+
+export type ExportListing =
+  | {
+      listing_id: string;
+      project_name: string;
+      listing_type: string;
+
+      tenure: string;
+      property_status: string;
+      land_area: number;
+      built_up_area: number;
+      price: number;
+      current_rental: number;
+      description: string;
+      city: string;
+      state: string;
+      agent_first_name: string;
+      agent_last_name: string;
+      agent_email: string;
+      agent_contact: string;
+    }
+  | {
+      property_type: "residential";
+      property_sub_type: string;
+      bedrooms: number;
+      bathrooms: number;
+      car_parks: number;
+      furnishing: string;
+    }
+  | {
+      property_type: "commercial";
+      property_sub_type: string;
+      furnishing: string;
+    }
+  | {
+      property_type: "industrial";
+      property_sub_type: string;
+      floor_loading: number;
+      eaves_height: number;
+      power_supply: number;
+      gas_supply: boolean;
+      usage: string;
+    }
+  | {
+      property_type: "land";
+      property_sub_type: string;
+      status: string;
+      reserve: string;
+    };
+
+export type InsertListing = InferInsertModel<typeof schema.listings>;

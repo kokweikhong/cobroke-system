@@ -2,6 +2,7 @@ import { getAuthSession } from "@/actions/session";
 import CreateListingForm from "./_components/create-listing-form";
 
 export default async function Page() {
+  // TODO: Fetch user session
   const session = await getAuthSession();
 
   // if (!session) {

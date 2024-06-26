@@ -9,10 +9,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    // <html lang="en">
-    <body className="bg-white h-full">
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8">{children}</main>
-    </body>
-    // {/* </html> */}
+    <main className="container mx-auto px-4 sm:px-6 lg:px-8">{children}</main>
   );
 }

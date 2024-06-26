@@ -19,6 +19,7 @@ export default async function Page({
 }) {
   const query = searchParams.q || "";
   console.log(query);
+  // TODO: Fetch listings by user ID
   // const session = await getAuthSession();
   // if (!session) {
   //   return <div>Unauthorized</div>;

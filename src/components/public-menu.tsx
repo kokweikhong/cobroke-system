@@ -9,10 +9,9 @@ import {
 import { MenuIcon } from "lucide-react";
 import logo from "../../public/logo.svg";
 import Image from "next/image";
-import UserCard from "./UserCard";
-import NavLinks from "./NavLinks";
+import NavLinks from "./nav-links";
 
-const MobileMenu = () => {
+const PublicMenu = () => {
   return (
     <Sheet>
       <SheetTrigger>
@@ -29,12 +28,13 @@ const MobileMenu = () => {
               className="w-auto h-8 object-cover mx-auto"
             />
           </SheetTitle>
-          <SheetDescription></SheetDescription>
-          <UserCard />
+          <SheetDescription>
+            Welcome to cobroke system for real estate agents
+          </SheetDescription>
         </SheetHeader>
         <div className="grow bg-white h-full mt-4 rounded-xl">
           <div style={{ overflow: "visible" }} className="bg-white rounded-2xl">
-            <NavLinks />
+            <NavLinks layout="all" />
           </div>
         </div>
       </SheetContent>
@@ -42,4 +42,4 @@ const MobileMenu = () => {
   );
 };
 
-export default MobileMenu;
+export default PublicMenu;

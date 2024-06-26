@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { userOMG } from "./actions";
 import { generateMockUsers } from "@/mocks/users";
 import SearchUser from "./_components/search-user";
 import UpdateButton from "./_components/update-button";
+import { EditIcon } from "lucide-react";
 
 export default function Page() {
+  // TODO: Fetch users
   const users = generateMockUsers();
   return (
     <div>
@@ -17,12 +18,18 @@ export default function Page() {
         <div>
           <SearchUser />
         </div>
-        <div className="">
+        <div className="flex justify-end gap-4">
           <Link
             href="/admin/users/create"
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary/90"
           >
             Create User
+          </Link>
+          <Link
+            href="/admin/users/create/csv"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary/90"
+          >
+            Upload CSV
           </Link>
         </div>
       </div>
@@ -46,6 +53,7 @@ export default function Page() {
                       {user.role}
                     </span>
                   </div>
+
                   <p className="mt-1 truncate text-sm text-gray-500">
                     {user.contactNumber}
                   </p>
@@ -53,7 +61,12 @@ export default function Page() {
                     {user.email}
                   </p>
                 </div>
-                {/* <img className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src={person.imageUrl} alt="" /> */}
+                <Link
+                  href={`/admin/users/edit/${user.id}`}
+                  className="flex-shrink-0 text-primary hover:text-primary/90"
+                >
+                  <EditIcon size={16} />
+                </Link>
               </div>
               <div>
                 <UpdateButton
