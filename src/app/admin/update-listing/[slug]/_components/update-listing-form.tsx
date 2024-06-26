@@ -26,7 +26,6 @@ const UpdateListingForm: FC<UpdateListingFormProps> = ({ data, listingId }) => {
     defaultValues: data,
   });
 
-  // TODO: Implement update listing
   async function handleSubmit(data: ListingWithJoins) {
     toast("Are you sure you want to update this listing?", {
       action: {
@@ -49,7 +48,6 @@ const UpdateListingForm: FC<UpdateListingFormProps> = ({ data, listingId }) => {
     });
   }
 
-  // TODO: Implement delete listing
   async function handleDelete() {
     toast("Are you sure you want to delete this listing?", {
       action: {
@@ -95,10 +93,30 @@ const UpdateListingForm: FC<UpdateListingFormProps> = ({ data, listingId }) => {
                 <TabsTrigger value="listing">Listing</TabsTrigger>
                 <TabsTrigger value="address">Address</TabsTrigger>
                 <TabsTrigger value="client">Client</TabsTrigger>
-                <TabsTrigger value="residential">Residential</TabsTrigger>
-                <TabsTrigger value="commercial">Commercial</TabsTrigger>
-                <TabsTrigger value="industrial">Industrial</TabsTrigger>
-                <TabsTrigger value="land">Land</TabsTrigger>
+                <TabsTrigger
+                  disabled={data.listings.propertyType !== "residential"}
+                  value="residential"
+                >
+                  Residential
+                </TabsTrigger>
+                <TabsTrigger
+                  disabled={data.listings.propertyType !== "commercial"}
+                  value="commercial"
+                >
+                  Commercial
+                </TabsTrigger>
+                <TabsTrigger
+                  disabled={data.listings.propertyType !== "industrial"}
+                  value="industrial"
+                >
+                  Industrial
+                </TabsTrigger>
+                <TabsTrigger
+                  disabled={data.listings.propertyType !== "land"}
+                  value="land"
+                >
+                  Land
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="listing">
                 <ListingForm form={form} />

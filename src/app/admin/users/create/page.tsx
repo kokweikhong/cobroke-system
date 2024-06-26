@@ -24,8 +24,16 @@ import { createUser } from "@/actions/users";
 type InsertUser = InferInsertModel<typeof schema.users>;
 
 export default function Page() {
-  // TODO: Implement create user
   const form = useForm<InsertUser>();
+
+  async function handleSubmit(data: InsertUser) {
+    try {
+      await createUser(data);
+    } catch (error) {
+      console.error("Failed to create user", error);
+    }
+  }
+
   return (
     <div>
       <div className="mb-4">
@@ -33,7 +41,10 @@ export default function Page() {
       </div>
       <div className="max-w-md">
         <Form {...form}>
-          <form action={createUser} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="firstName"
@@ -71,6 +82,20 @@ export default function Page() {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input type="email" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="contactNumber"
+              defaultValue=""
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contact Number</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
                   </FormControl>
                 </FormItem>
               )}

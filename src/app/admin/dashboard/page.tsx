@@ -18,15 +18,13 @@ export default async function Page({
   searchParams: { [key: string]: string };
 }) {
   const query = searchParams.q || "";
-  console.log(query);
-  // TODO: Fetch listings by user ID
-  // const session = await getAuthSession();
-  // if (!session) {
-  //   return <div>Unauthorized</div>;
-  // }
-  // const userId = session.userId || "1";
-  // const listings = await getListingsByUserId(userId, query);
-  const listings = generateMockLisitngs("1");
+  const session = await getAuthSession();
+  if (!session) {
+    return <div>Unauthorized</div>;
+  }
+  const userId = session.userId;
+  const listings = await getListingsByUserId(userId, query);
+  // const listings = generateMockLisitngs("1");
 
   return (
     <div>

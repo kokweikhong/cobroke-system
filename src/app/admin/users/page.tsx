@@ -1,14 +1,17 @@
-"use client";
+// "use client";
 
 import Link from "next/link";
 import { generateMockUsers } from "@/mocks/users";
 import SearchUser from "./_components/search-user";
 import UpdateButton from "./_components/update-button";
 import { EditIcon } from "lucide-react";
+import db from "@/db";
+import * as schema from "@/db/schema";
 
-export default function Page() {
-  // TODO: Fetch users
-  const users = generateMockUsers();
+export default async function Page() {
+  const users = await db.query.users.findMany({
+    orderBy: (users, { desc }) => desc(users.createdAt),
+  });
   return (
     <div>
       <div className="flex justify-between p-6">

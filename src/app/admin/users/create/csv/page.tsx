@@ -18,7 +18,6 @@ type FormData = {
 };
 
 export default function Page() {
-  // TODO: Implement create user
   const { register, handleSubmit } = useForm<FormData>();
   const [users, setUsers] = useState<User[]>([]);
 
@@ -47,14 +46,18 @@ export default function Page() {
     Papa.parse(data.file[0], {
       header: true,
       complete: function (results) {
+        console.log("Finished:", results.data);
         let users = results.data as User[];
-        users = users.map((user) => {
-          return {
-            ...user,
-            password: "cobroke",
-            role: "user",
-          };
-        });
+        users = users
+          .filter((e) => e.email)
+          .map((user) => {
+            return {
+              ...user,
+              password: "cobroke",
+              role: "user",
+            };
+          });
+        console.log(users);
 
         setUsers(users);
       },

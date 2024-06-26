@@ -22,13 +22,21 @@ import {
 import logo from "@/../public/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { createUser } from "@/actions/users";
+import { publicRegisterUser } from "@/actions/users";
 
 type InsertUser = InferInsertModel<typeof schema.users>;
 
 export default function Page() {
-  // TODO: Implement create user
   const form = useForm<InsertUser>();
+
+  async function handleSubmit(data: InsertUser) {
+    try {
+      await publicRegisterUser(data);
+    } catch (error) {
+      console.error("Failed to create user", error);
+    }
+  }
+
   return (
     <div className="mt-10 min-h-full flex flex-col items-center justify-center max-w-3xl mx-auto px-4">
       <Link href={"/"} className="mb-4">
@@ -43,7 +51,10 @@ export default function Page() {
       </div>
       <div className="w-full">
         <Form {...form}>
-          <form action={createUser} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="firstName"

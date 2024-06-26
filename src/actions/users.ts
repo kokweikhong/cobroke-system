@@ -7,22 +7,42 @@ import { hashPassword } from "@/lib/password";
 import { eq } from "drizzle-orm";
 import { InserUser } from "@/types/user.types";
 import { redirect } from "next/navigation";
+import { SelectUser } from "@/types/listings";
 
-export async function createUser(formData: FormData) {
-  const password = formData.get("password") as string;
+export async function createUser(data: InserUser) {
+  const password = data.password;
   try {
     const hashedPassword = await hashPassword(password);
     if (!hashedPassword) {
       return;
     }
-    formData.set("password", hashedPassword);
+    data.password = hashedPassword;
   } catch (error) {
     console.error("Error hashing password:", error);
     return;
   }
-  await db.insert(schema.users).values(formData as any);
+  await db.insert(schema.users).values(data);
 
   revalidatePath("/");
+  redirect("/admin/users");
+}
+
+export async function publicRegisterUser(data: InserUser) {
+  const password = data.password;
+  try {
+    const hashedPassword = await hashPassword(password);
+    if (!hashedPassword) {
+      return;
+    }
+    data.password = hashedPassword;
+  } catch (error) {
+    console.error("Error hashing password:", error);
+    return;
+  }
+  await db.insert(schema.users).values(data);
+
+  revalidatePath("/");
+  redirect("/auth/signin");
 }
 
 export async function createUsers(users: InserUser[]) {

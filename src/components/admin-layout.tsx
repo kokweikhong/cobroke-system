@@ -15,23 +15,22 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }>) {
   const session = await getAuthSession();
-  // if (!session) {
-  //   return null;
-  // }
-  // const fullName = session?.firstName + " " + session?.lastName;
-  let fullName;
+  if (!session) {
+    return null;
+  }
+  const fullName = session?.firstName + " " + session?.lastName;
   return (
     <>
       <div className="bg-adminBackground">
         <AdminHeader
           userId={session?.userId || "11231231-asdadsa"}
-          userName={fullName || "John Doe"}
+          userName={fullName}
           userCredits={1000}
           isAuth={session?.isLogged || false}
         />
         <AdminSidebar
-          userId={session?.userId || "11231231-asdadsa"}
-          userName={fullName || "John Doe"}
+          userId={session?.userId}
+          userName={fullName}
           userCredits={1000}
         />
         <main className="lg:pl-72">

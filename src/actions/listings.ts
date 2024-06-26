@@ -149,7 +149,7 @@ export async function updateListing(data: ListingWithJoins) {
 
   await updateListingStatus(listingId);
   revalidatePath("/admin/dashboard");
-  redirect("/admin/dashboard");
+  // redirect("/admin/dashboard");
 }
 
 export async function updateListingStatus(listingId: string) {
@@ -311,8 +311,8 @@ export async function getFilteredListings(filter: MatchListingFormValues) {
     .leftJoin(schema.users, eq(schema.users.id, schema.listings.userId))
     .where(
       and(
-        sql`${filter.listingType} = '' OR listings.listingType ILIKE '%' || ${filter.listingType} || '%'`,
-        sql`${filter.propertyType} = '' OR listings.propertyType ILIKE '%' || ${filter.propertyType} || '%'`,
+        sql`${filter.listingType} = '' OR listings.listing_type::text ILIKE '%' || ${filter.listingType} || '%'`,
+        sql`${filter.propertyType} = '' OR listings.property_type::text ILIKE '%' || ${filter.propertyType} || '%'`,
         ilike(schema.listings.tenure, filter.tenure).if(filter.tenure !== ""),
         ilike(schema.listings.propertyStatus, filter.propertyStatus).if(
           filter.propertyStatus !== ""

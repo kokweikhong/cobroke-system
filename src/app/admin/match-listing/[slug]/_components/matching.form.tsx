@@ -24,9 +24,14 @@ import { convertListingWithJoinsToExportListing } from "@/lib/listings";
 type MatchingFormProps = {
   data: ListingWithJoins;
   setResult: (result: ExportListing[]) => void;
+  setActiveTab: (tab: string) => void;
 };
 
-const MatchingForm: FC<MatchingFormProps> = ({ data, setResult }) => {
+const MatchingForm: FC<MatchingFormProps> = ({
+  data,
+  setResult,
+  setActiveTab,
+}) => {
   const listing = data.listings;
   const formDefaultValues: MatchListingFormValues = {
     listingId: data.listings.id,
@@ -86,13 +91,12 @@ const MatchingForm: FC<MatchingFormProps> = ({ data, setResult }) => {
       action: {
         label: "Match",
         onClick: async () => {
-          // TODO: Match listing
-          // const listings = await getFilteredListings(values);
-          const listings = generateMockListingsWithJoin("23432432");
+          const listings = await getFilteredListings(values);
           const exportListings = listings.map((listing) =>
             convertListingWithJoinsToExportListing(listing)
           );
           setResult(exportListings);
+          setActiveTab("matching-result");
         },
       },
     });

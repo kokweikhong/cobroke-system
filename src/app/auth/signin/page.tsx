@@ -8,13 +8,12 @@ import { Button } from "@/components/ui/button";
 import logo from "@/../public/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
+import { useFormState } from "react-dom";
 
 export default function Page() {
-  // TODO: Implement sign in
-  // const [state, formAction] = useFormState(signIn, {
-  //   email: "",
-  //   password: "",
-  // });
+  const [state, formAction] = useFormState(signIn, {
+    message: "",
+  });
   return (
     <div className="mt-10 flex min-h-full flex-1 items-center justify-center">
       <div className="w-full max-w-sm space-y-10">
@@ -31,8 +30,8 @@ export default function Page() {
           </h2>
         </div>
         <div>
-          {/* {state?.message && <p>{state.message}</p>} */}
-          <form action={signIn} className="space-y-6">
+          {state?.message && <p>{state.message}</p>}
+          <form action={formAction} className="space-y-6">
             <div>
               <label htmlFor="email" className="sr-only">
                 Email

@@ -93,6 +93,20 @@ const UserForm: FC<UserFormProps> = ({ data }) => {
 
           <FormField
             control={form.control}
+            name="contactNumber"
+            defaultValue=""
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Contact Number</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="password"
             defaultValue=""
             render={({ field }) => (

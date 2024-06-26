@@ -5,13 +5,15 @@ import MatchingTabs from "./_components/matching-tabs";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const session = await getAuthSession();
+  if (!session) {
+    return <div>Unauthorized</div>;
+  }
   console.log(params.slug, session?.userId);
-  // TODO: Fetch listing by ID
-  // const listing = await getListingById(params.slug, session?.userId || "");
+  const listing = await getListingById(params.slug, session.userId);
   // const listing = {};
-  const listings = generateMockListingsWithJoin("1");
-  const listing = listings.find((l) => l.listings.propertyType === "land");
-  console.log(listing);
+  // const listings = generateMockListingsWithJoin("1");
+  // const listing = listings.find((l) => l.listings.propertyType === "land");
+  // console.log(listing);
 
   return (
     <div>
@@ -21,7 +23,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </h1>
       </div>
       <div>
-        <MatchingTabs data={listing && (listing as any)} />
+        <MatchingTabs data={listing} />
       </div>
     </div>
   );

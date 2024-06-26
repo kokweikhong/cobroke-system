@@ -17,8 +17,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { InferInsertModel } from "drizzle-orm";
-import * as schema from "@/db/schema";
 import { toast } from "sonner";
 import { createListing } from "@/actions/listings";
 import { FC } from "react";
@@ -36,7 +34,7 @@ const CreateListingForm: FC<CreateListingFormProps> = ({ userId }) => {
         label: "Yes",
         onClick: async () => {
           try {
-            // TODO: Create listing
+            data.isActive = false;
             await createListing(data);
             toast.success("Listing created successfully");
           } catch (error) {

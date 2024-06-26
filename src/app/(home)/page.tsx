@@ -11,9 +11,8 @@ import { generateMockLisitngs } from "@/mocks/listings";
 import { getReadableListingType } from "@/lib/listing-type";
 
 export default async function Page() {
-  // TODO: Fetch listings from the database
-  // const listings = await db.query.listings.findMany();
-  let listings = generateMockLisitngs("1");
+  const listings = await db.query.listings.findMany();
+  // let listings = generateMockLisitngs("1");
   if (!listings) {
     return <div>No listings found</div>;
   }

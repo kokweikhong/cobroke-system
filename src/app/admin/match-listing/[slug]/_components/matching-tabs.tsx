@@ -13,6 +13,7 @@ type MatchingTabsProps = {
 
 const MatchingTabs: FC<MatchingTabsProps> = ({ data }) => {
   const [result, setResult] = useState<ExportListing[]>([]);
+  const [activeTab, setActiveTab] = useState("matching-form");
 
   function handleMatchingResult() {
     console.log(result);
@@ -28,14 +29,23 @@ const MatchingTabs: FC<MatchingTabsProps> = ({ data }) => {
   return (
     <div>
       <div>
-        <Tabs defaultValue="matching-form" className="w-auto">
+        <Tabs
+          defaultValue={activeTab}
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="w-auto"
+        >
           <TabsList className="flex flex-wrap gap-2 py-4 h-auto">
             <TabsTrigger value="matching-form">Matching Form</TabsTrigger>
             <TabsTrigger value="matching-result">Matching Result</TabsTrigger>
           </TabsList>
 
           <TabsContent value="matching-form">
-            <MatchingForm data={data && (data as any)} setResult={setResult} />
+            <MatchingForm
+              data={data}
+              setResult={setResult}
+              setActiveTab={setActiveTab}
+            />
           </TabsContent>
           <TabsContent value="matching-result">
             <div className="flex flex-col gap-4">
