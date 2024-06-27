@@ -11,6 +11,7 @@ export default defineConfig({
     password: config.POSTGRES_PASSWORD,
     database: config.POSTGRES_DB,
     port: config.POSTGRES_PORT,
+    ssl: false,
   },
   verbose: true,
   strict: true,
