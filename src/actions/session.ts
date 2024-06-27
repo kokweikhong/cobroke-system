@@ -7,12 +7,13 @@ import { SessionData } from "@/types/session";
 
 async function setAuthSession(data: SessionData) {
   // 30 minutes
-  const expiresAt = new Date().getTime() + 1000 * 60 * 30;
+  // 7 days
+  const expiresAt = new Date().getTime() + 1000 * 60 * 60 * 24 * 7;
   data.expiresAt = new Date(expiresAt).toISOString();
   console.log("data", data);
   const encrytedSessionData = CryptoJS.AES.encrypt(
     JSON.stringify(data),
-    process.env.ENCRYPT_SECRET!,
+    process.env.ENCRYPT_SECRET!
   );
   console.log("encrytedSessionData", encrytedSessionData.toString());
   cookies().set("cobroke-auth", encrytedSessionData.toString(), {
@@ -32,7 +33,7 @@ async function getAuthSession() {
   }
   const bytes = CryptoJS.AES.decrypt(
     encryptedSessionData.value,
-    process.env.ENCRYPT_SECRET!,
+    process.env.ENCRYPT_SECRET!
   );
   const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
   return JSON.parse(decryptedData) as SessionData;
