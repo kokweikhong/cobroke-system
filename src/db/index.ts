@@ -9,6 +9,7 @@ export const connection = postgres({
   password: config.POSTGRES_PASSWORD,
   database: config.POSTGRES_DB,
   port: config.POSTGRES_PORT,
+  ssl: false,
 });
 
 // export const connection = postgres(process.env.POSTGRES_URL!);
