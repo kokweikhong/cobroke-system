@@ -19,16 +19,16 @@ export default async function Page({
       or(
         sql`${searchParams.q || ""} = '' OR users.first_name ILIKE '%' || ${
           searchParams.q
-        } || '%'`,
+        } || '%'`.if(searchParams.q && searchParams.q.length > 1),
         sql`${searchParams.q || ""} = '' OR users.last_name ILIKE '%' || ${
           searchParams.q
-        } || '%'`,
+        } || '%'`.if(searchParams.q && searchParams.q.length > 1),
         sql`${searchParams.q || ""} = '' OR users.email ILIKE '%' || ${
           searchParams.q
-        } || '%'`,
+        } || '%'`.if(searchParams.q && searchParams.q.length > 1),
         sql`${searchParams.q || ""} = '' OR users.role::text ILIKE '%' || ${
           searchParams.q
-        } || '%'`
+        } || '%'`.if(searchParams.q && searchParams.q.length > 1)
       ),
     orderBy: (users, { desc }) => desc(users.createdAt),
   });
