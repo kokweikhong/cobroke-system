@@ -7,9 +7,29 @@ import UpdateButton from "./_components/update-button";
 import { EditIcon } from "lucide-react";
 import db from "@/db";
 import * as schema from "@/db/schema";
+import { sql } from "drizzle-orm";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { q: string };
+}) {
   const users = await db.query.users.findMany({
+    where: (users, { or, ilike }) =>
+      or(
+        sql`${searchParams.q || ""} = '' OR users.first_name ILIKE '%' || ${
+          searchParams.q
+        } || '%'`,
+        sql`${searchParams.q || ""} = '' OR users.last_name ILIKE '%' || ${
+          searchParams.q
+        } || '%'`,
+        sql`${searchParams.q || ""} = '' OR users.email ILIKE '%' || ${
+          searchParams.q
+        } || '%'`,
+        sql`${searchParams.q || ""} = '' OR users.role::text ILIKE '%' || ${
+          searchParams.q
+        } || '%'`
+      ),
     orderBy: (users, { desc }) => desc(users.createdAt),
   });
   return (

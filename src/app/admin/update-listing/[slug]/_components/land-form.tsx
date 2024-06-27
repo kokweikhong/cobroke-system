@@ -18,6 +18,7 @@ import {
   furnishings,
   landReserves,
   landStatues,
+  propertySubType,
 } from "@/constants/listing.constants";
 import { ListingWithJoins } from "@/types/listings";
 import { FC } from "react";
@@ -51,9 +52,20 @@ const LandForm: FC<LandFormProps> = ({ form }) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Property Sub Type</FormLabel>
-            <FormControl>
-              <Input {...field} />
-            </FormControl>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger className="capitalize">
+                  <SelectValue placeholder="Select a verified property type" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {propertySubType.land.map((item) => (
+                  <SelectItem key={item} value={item} className="capitalize">
+                    {item}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </FormItem>
         )}
       />

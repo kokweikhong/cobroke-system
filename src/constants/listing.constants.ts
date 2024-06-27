@@ -18,6 +18,20 @@ export const addressStates: string[] = [
 ];
 
 export const propertySubType = {
+  residential: [
+    "room",
+    "studio",
+    "flat",
+    "apartment",
+    "serviced apartment",
+    "condominium",
+    "terrace",
+    "semi detached",
+    "bungalow",
+    "cluster",
+    "townhouse",
+    "others",
+  ],
   commerical: [
     "shoplot",
     "office",
@@ -27,14 +41,28 @@ export const propertySubType = {
     "data center",
     "others",
   ],
+
+  industrial: [
+    "terrace",
+    "semi detached",
+    "detached",
+    "cluster",
+    "ramp up factory",
+  ],
   land: ["agricultural", "residential", "commercial", "industrial", "island"],
 };
+
+export const propertyStatuses = ["vacant", "tenanted", "under construction"];
+
+export const tenures = ["freehold", "leasehold"];
 
 export const furnishings = [
   "fully furnished",
   "partially furnished",
   "unfurnished",
 ];
+
+export const industrialUsages = ["light", "medium", "heavy"];
 
 export const landStatues = ["converted", "non-converted"];
 

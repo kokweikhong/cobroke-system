@@ -14,6 +14,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  industrialUsages,
+  propertySubType,
+} from "@/constants/listing.constants";
 import { ListingWithJoins } from "@/types/listings";
 import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
@@ -46,9 +50,20 @@ const IndustrialForm: FC<IndustrialFormProps> = ({ form }) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Property Sub Type</FormLabel>
-            <FormControl>
-              <Input {...field} />
-            </FormControl>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger className="capitalize">
+                  <SelectValue placeholder="Select a verified property type" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {propertySubType.industrial.map((item) => (
+                  <SelectItem key={item} value={item} className="capitalize">
+                    {item}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </FormItem>
         )}
       />
@@ -98,17 +113,22 @@ const IndustrialForm: FC<IndustrialFormProps> = ({ form }) => {
       <FormField
         control={form.control}
         name="industrials.usage"
-        defaultValue=""
+        defaultValue="light"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Usage</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="capitalize">
                   <SelectValue />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
+                {industrialUsages.map((usage) => (
+                  <SelectItem key={usage} value={usage} className="capitalize">
+                    {usage}
+                  </SelectItem>
+                ))}
                 <SelectItem value="fully">Fully Furnished</SelectItem>
                 <SelectItem value="partially">Partially Furnished</SelectItem>
                 <SelectItem value="unfurnished">Unfurnished</SelectItem>

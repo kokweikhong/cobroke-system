@@ -19,6 +19,11 @@ import { ListingWithJoins } from "@/types/listings";
 import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { Switch } from "@/components/ui/switch";
+import {
+  propertyStatuses,
+  propertyTypes,
+  tenures,
+} from "@/constants/listing.constants";
 
 type ListingFormProps = {
   form: UseFormReturn<ListingWithJoins>;
@@ -96,15 +101,16 @@ const ListingForm: FC<ListingFormProps> = ({ form }) => {
             <FormLabel>Property Type</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="capitalize">
                   <SelectValue placeholder="Select a verified property type" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="residential">Residential</SelectItem>
-                <SelectItem value="commercial">Commercial</SelectItem>
-                <SelectItem value="industrial">Industrial</SelectItem>
-                <SelectItem value="land">Land</SelectItem>
+                {propertyTypes.map((item) => (
+                  <SelectItem key={item} value={item} className="capitalize">
+                    {item}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </FormItem>
@@ -154,13 +160,20 @@ const ListingForm: FC<ListingFormProps> = ({ form }) => {
             <FormLabel>Tenure</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="capitalize">
                   <SelectValue placeholder="Select a verified tenure" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {/* <SelectItem value="public">Public</SelectItem>
-                    <SelectItem value="private">Private</SelectItem> */}
+                {tenures.map((tenure) => (
+                  <SelectItem
+                    key={tenure}
+                    value={tenure}
+                    className="capitalize"
+                  >
+                    {tenure}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </FormItem>
@@ -176,13 +189,20 @@ const ListingForm: FC<ListingFormProps> = ({ form }) => {
             <FormLabel>Property Status</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="capitalize">
                   <SelectValue placeholder="Select a verified property status" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {/* <SelectItem value="public">Public</SelectItem>
-                    <SelectItem value="private">Private</SelectItem> */}
+                {propertyStatuses.map((status) => (
+                  <SelectItem
+                    key={status}
+                    value={status}
+                    className="capitalize"
+                  >
+                    {status}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </FormItem>
@@ -263,13 +283,6 @@ const ListingForm: FC<ListingFormProps> = ({ form }) => {
           </FormItem>
         )}
       />
-
-      {/* <PropertyAddressForm form={form} />
-          <ClientForm form={form} />
-
-          <CommercialForm form={form} />
-
-          <LandForm form={form} /> */}
     </div>
   );
 };

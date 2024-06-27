@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { createListing } from "@/actions/listings";
 import { FC } from "react";
 import type { InsertListing } from "@/types/listings";
+import { propertyStatuses, tenures } from "@/constants/listing.constants";
 
 type CreateListingFormProps = Readonly<{
   userId: string;
@@ -160,13 +161,20 @@ const CreateListingForm: FC<CreateListingFormProps> = ({ userId }) => {
               <FormLabel>Property Type</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="capitalize">
                     <SelectValue placeholder="Select a verified tenure" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="freehold">Freehold</SelectItem>
-                  <SelectItem value="leasehold">Leasehold</SelectItem>
+                  {tenures.map((tenure) => (
+                    <SelectItem
+                      key={tenure}
+                      value={tenure}
+                      className="capitalize"
+                    >
+                      {tenure}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </FormItem>
@@ -182,16 +190,20 @@ const CreateListingForm: FC<CreateListingFormProps> = ({ userId }) => {
               <FormLabel>Property Type</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="capitalize">
                     <SelectValue placeholder="Select a verified tenure" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="vacant">Vacant</SelectItem>
-                  <SelectItem value="tenanted">Tenanted</SelectItem>
-                  <SelectItem value="under construction">
-                    Under Construction
-                  </SelectItem>
+                  {propertyStatuses.map((status) => (
+                    <SelectItem
+                      key={status}
+                      value={status}
+                      className="capitalize"
+                    >
+                      {status}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </FormItem>

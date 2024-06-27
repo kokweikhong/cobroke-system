@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { furnishings } from "@/constants/listing.constants";
+import { furnishings, propertySubType } from "@/constants/listing.constants";
 import { ListingWithJoins } from "@/types/listings";
 import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
@@ -47,9 +47,20 @@ const CommercialForm: FC<CommercialFormProps> = ({ form }) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Property Sub Type</FormLabel>
-            <FormControl>
-              <Input {...field} />
-            </FormControl>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger className="capitalize">
+                  <SelectValue placeholder="Select a verified property type" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {propertySubType.commerical.map((item) => (
+                  <SelectItem key={item} value={item} className="capitalize">
+                    {item}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </FormItem>
         )}
       />
