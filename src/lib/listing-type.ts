@@ -7,14 +7,14 @@ export function getOppositeListingType(listingType: string) {
     case "wtl":
       return "wtr";
     case "wtr":
-      return "wts";
+      return "wtl";
     default:
       return "";
   }
 }
 
 export function getReadableListingType(listingType: string) {
-  switch (listingType) {
+  switch (listingType.toLowerCase()) {
     case "wts":
       return "Want To Sell";
     case "wtb":

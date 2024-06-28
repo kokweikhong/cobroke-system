@@ -40,8 +40,24 @@ export default function Page() {
     });
   }
 
+  function downloadCSVSample() {
+    const header = ["firstName", "lastName", "email", "contactNumber"];
+    const csv = Papa.unparse([header]);
+    const csvData = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const csvURL = window.URL.createObjectURL(csvData);
+    const tempLink = document.createElement("a");
+    tempLink.href = csvURL;
+    tempLink.setAttribute("download", `user-upload-sample.csv`);
+    tempLink.click();
+  }
+
   const onSubmit = async (data: FormData) => {
     const formData = new FormData();
+    if (!data.file[0]) {
+      toast.warning("Please select a file");
+      return;
+    }
+
     formData.append("file", data.file[0]);
 
     Papa.parse(data.file[0], {
@@ -79,7 +95,16 @@ export default function Page() {
           <Input type="file" {...register("file")} />
         </div>
 
-        <Button type="submit">Get Users</Button>
+        <div className="flex gap-x-2">
+          <Button type="submit">Get Users</Button>
+          <Button
+            type="button"
+            className="bg-white text-[#808080] border border-[#808080] rounded-lg uppercase !p-[10px] hover:bg-[#808080] hover:text-white"
+            onClick={downloadCSVSample}
+          >
+            Download CSV Sample
+          </Button>
+        </div>
       </form>
 
       <Separator className="my-4" />

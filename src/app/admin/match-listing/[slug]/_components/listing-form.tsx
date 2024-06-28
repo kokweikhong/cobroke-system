@@ -27,7 +27,7 @@ type ListingFormProps = {
 };
 
 const ListingForm: FC<ListingFormProps> = ({ form, data }) => {
-  const listing = data.listings;
+  // const listing = data.listings;
 
   return (
     <div>
@@ -48,9 +48,7 @@ const ListingForm: FC<ListingFormProps> = ({ form, data }) => {
           </h3>
           <MoveRightIcon />
           <h3 className="uppercase">
-            {getReadableListingType(
-              getOppositeListingType(form.watch("listingType"))
-            )}
+            {getReadableListingType(form.watch("listingType"))}
           </h3>
         </div>
 
@@ -131,9 +129,12 @@ const ListingForm: FC<ListingFormProps> = ({ form, data }) => {
           </div>
         </div>
 
-        <LandAreaInput form={form} value={listing.landArea || "20"} />
-        <BuiltUpAreaInput form={form} value={listing.builtUpArea || "30"} />
-        <PriceInput form={form} value={listing.price || "1000"} />
+        <LandAreaInput form={form} value={data.listings.landArea || "20"} />
+        <BuiltUpAreaInput
+          form={form}
+          value={data.listings.builtUpArea || "30"}
+        />
+        <PriceInput form={form} value={data.listings.price || "1000"} />
       </div>
     </div>
   );
