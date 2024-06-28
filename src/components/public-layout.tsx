@@ -15,11 +15,11 @@ export default async function PublicLayout({
 }) {
   const session = await getAuthSession();
 
-  if (session?.isLogged || !session) {
-    throw new Error("Not authorized");
-  }
+  // if (session?.isLogged || !session) {
+  //   throw new Error("Not authorized");
+  // }
 
-  const fullName = session.firstName + " " + session.lastName;
+  const fullName = session?.firstName + " " + session?.lastName;
   return (
     <div className="bg-adminBackground">
       <header className="sticky top-0 z-40 lg:mx-auto lg:px-8">
