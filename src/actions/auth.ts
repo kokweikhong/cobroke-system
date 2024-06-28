@@ -20,7 +20,7 @@ export async function signIn(prevState: any, formData: FormData) {
   });
   if (!user) {
     return {
-      message: "Invalid email",
+      message: "The email is not registered",
     };
   }
   const hashedPassword = user.password;
@@ -32,7 +32,7 @@ export async function signIn(prevState: any, formData: FormData) {
   const isValid = await verifyPassword(password, hashedPassword);
   if (!isValid) {
     return {
-      message: "Invalid password",
+      message: "The password is incorrect",
     };
   }
 

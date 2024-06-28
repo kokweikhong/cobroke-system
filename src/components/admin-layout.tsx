@@ -15,10 +15,10 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }>) {
   const session = await getAuthSession();
-  if (!session) {
-    return null;
+  if (!session || !session.isLogged) {
+    throw new Error("Not authorized");
   }
-  const fullName = session?.firstName + " " + session?.lastName;
+  const fullName = session.firstName + " " + session.lastName;
   return (
     <>
       <div className="bg-adminBackground">

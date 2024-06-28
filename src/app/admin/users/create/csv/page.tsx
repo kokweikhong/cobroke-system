@@ -10,6 +10,7 @@ import { createUsers } from "@/actions/users";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { z } from "zod";
 
 type User = InferInsertModel<typeof schema.users>;
 

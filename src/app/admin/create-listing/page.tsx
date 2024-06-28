@@ -4,8 +4,8 @@ import CreateListingForm from "./_components/create-listing-form";
 export default async function Page() {
   const session = await getAuthSession();
 
-  if (!session) {
-    return null;
+  if (!session || !session.isLogged) {
+    throw new Error("Not authorized");
   }
 
   return (

@@ -1,5 +1,3 @@
-// "use client";
-
 import Link from "next/link";
 import { generateMockUsers } from "@/mocks/users";
 import SearchUser from "./_components/search-user";

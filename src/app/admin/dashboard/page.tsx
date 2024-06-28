@@ -19,8 +19,8 @@ export default async function Page({
 }) {
   const query = searchParams.q || "";
   const session = await getAuthSession();
-  if (!session) {
-    return <div>Unauthorized</div>;
+  if (!session || !session.isLogged) {
+    throw new Error("Not authorized");
   }
   const userId = session.userId;
   const listings = await getListingsByUserId(userId, query);

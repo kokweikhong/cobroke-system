@@ -4,8 +4,8 @@ import { getAuthSession } from "@/actions/session";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const session = await getAuthSession();
-  if (!session) {
-    return <div>Unauthorized</div>;
+  if (!session || !session.isLogged) {
+    throw new Error("Not authorized");
   }
   const listingId = params.slug;
   const data = await getListingById(listingId, session.userId);

@@ -9,6 +9,7 @@ import logo from "@/../public/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { useFormState } from "react-dom";
+import ErrorMessageCard from "@/components/error-message-card";
 
 export default function Page() {
   const [state, formAction] = useFormState(signIn, {
@@ -30,7 +31,11 @@ export default function Page() {
           </h2>
         </div>
         <div>
-          {state?.message && <p>{state.message}</p>}
+          {state?.message && (
+            <ErrorMessageCard>
+              <p>{state.message}</p>
+            </ErrorMessageCard>
+          )}
           <form action={formAction} className="space-y-6">
             <div>
               <label htmlFor="email" className="sr-only">

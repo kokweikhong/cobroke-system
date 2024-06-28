@@ -5,8 +5,8 @@ import MatchingTabs from "./_components/matching-tabs";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const session = await getAuthSession();
-  if (!session) {
-    return <div>Unauthorized</div>;
+  if (!session || !session.isLogged) {
+    throw new Error("Not authorized");
   }
   console.log(params.slug, session?.userId);
   const listing = await getListingById(params.slug, session.userId);
