@@ -99,7 +99,7 @@ export default function Page() {
           <Button type="submit">Get Users</Button>
           <Button
             type="button"
-            className="bg-white text-[#808080] border border-[#808080] rounded-lg uppercase !p-[10px] hover:bg-[#808080] hover:text-white"
+            className="bg-white text-[#808080] border border-[#808080] rounded-lg !p-[10px] hover:bg-[#808080] hover:text-white"
             onClick={downloadCSVSample}
           >
             Download CSV Sample
