@@ -41,8 +41,11 @@ export default function Page() {
   }
 
   function downloadCSVSample() {
-    const header = ["firstName", "lastName", "email", "contactNumber"];
-    const csv = Papa.unparse([header]);
+    const sampleData = [
+      ["firstName", "lastName", "email", "contactNumber"],
+      ["Aaron", "Lee", "aaron.lee@gmail.com", "60123456789"],
+    ];
+    const csv = Papa.unparse(sampleData);
     const csvData = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const csvURL = window.URL.createObjectURL(csvData);
     const tempLink = document.createElement("a");
