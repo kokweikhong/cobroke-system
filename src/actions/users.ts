@@ -46,7 +46,16 @@ export async function publicRegisterUser(data: InserUser) {
 }
 
 export async function createUsers(users: InserUser[]) {
-  await db.insert(schema.users).values(users);
+  const usersWithHashedPasswords = (await Promise.all(
+    users.map(async (user) => {
+      const hashedPassword = await hashPassword(user.password);
+      if (!hashedPassword) {
+        return;
+      }
+      return { ...user, password: hashedPassword };
+    })
+  )) as InserUser[];
+  await db.insert(schema.users).values(usersWithHashedPasswords);
 
   revalidatePath("/");
   redirect("/admin/users");
