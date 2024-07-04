@@ -10,14 +10,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useFormState } from "react-dom";
 import ErrorMessageCard from "@/components/error-message-card";
-import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import ErrorMessage from "./_components/error-message";
 
 export default function Page() {
   const [state, formAction] = useFormState(signIn, {
     message: "",
   });
-  const searchParams = useSearchParams();
-  const errMessage = searchParams.get("message");
   return (
     <div className="mt-10 flex min-h-full flex-1 items-center justify-center">
       <div className="w-full max-w-sm space-y-10">
@@ -39,17 +38,9 @@ export default function Page() {
               <p>{state.message}</p>
             </ErrorMessageCard>
           )}
-          {errMessage && (
-            <ErrorMessageCard>
-              <p className="mb-4">{errMessage}</p>
-              <Link
-                href={"/admin/dashboard"}
-                className="text-primary hover:text-primary/90"
-              >
-                Go to dashboard
-              </Link>
-            </ErrorMessageCard>
-          )}
+          <Suspense>
+            <ErrorMessage />
+          </Suspense>
           <form action={formAction} className="space-y-6">
             <div>
               <label htmlFor="email" className="sr-only">
