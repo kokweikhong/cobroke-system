@@ -40,7 +40,7 @@ export default async function PublicLayout({
           </div>
 
           {session?.isLogged ? (
-            <UserMenu name={fullName} />
+            <UserMenu id={session.userId} name={fullName} />
           ) : (
             <Link
               href="/auth/signin"

@@ -51,8 +51,8 @@ const AdminHeader: FC<AdminHeaderProps> = ({
                   </SheetTitle>
                   <SheetDescription></SheetDescription>
                   <UserCard
-                    id={userId || "123456789"}
-                    name={userName || "John Doe"}
+                    id={userId}
+                    name={userName}
                     credits={userCredits || 1000}
                   />
                 </SheetHeader>
@@ -79,7 +79,7 @@ const AdminHeader: FC<AdminHeaderProps> = ({
         </div>
 
         {isAuth ? (
-          <UserMenu name={userName} />
+          <UserMenu id={userId} name={userName} />
         ) : (
           <Link
             href="/auth/signin"

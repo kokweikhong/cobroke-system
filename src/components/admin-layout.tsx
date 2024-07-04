@@ -23,7 +23,7 @@ export default async function AdminLayout({
     <>
       <div className="bg-adminBackground">
         <AdminHeader
-          userId={session?.userId || "11231231-asdadsa"}
+          userId={session.userId}
           userName={fullName}
           userCredits={1000}
           isAuth={session?.isLogged || false}
