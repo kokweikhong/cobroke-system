@@ -75,6 +75,9 @@ export default function Page() {
               ...user,
               password: "cobroke",
               role: "user",
+              isActive: true,
+              isApproved: true,
+              isVerified: true,
             };
           });
         console.log(users);
