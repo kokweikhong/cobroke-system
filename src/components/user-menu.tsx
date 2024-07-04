@@ -9,9 +9,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOutIcon, UserCogIcon, ChevronDownIcon } from "lucide-react";
+import {
+  LogOutIcon,
+  UserCogIcon,
+  ChevronDownIcon,
+  KeyIcon,
+} from "lucide-react";
+import Link from "next/link";
 
 type UserMenuProps = {
+  id: string;
   name: string;
 };
 
@@ -24,12 +31,26 @@ export default function UserMenu(props: UserMenuProps) {
           <ChevronDownIcon size="20" />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className="w-[170px]">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer flex items-center justify-between">
-          <button>Profile</button>
-          <UserCogIcon size="16" />
+        <DropdownMenuItem>
+          <Link
+            href={`/admin/users/edit/${props.id}`}
+            className="cursor-pointer flex items-center justify-between w-full"
+          >
+            <span>Profile</span>
+            <UserCogIcon size="16" />
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link
+            href={`/admin/users/change-password/${props.id}`}
+            className="cursor-pointer flex items-center justify-between w-full"
+          >
+            <span>Change Password</span>
+            <KeyIcon size="16" />
+          </Link>
         </DropdownMenuItem>
         <form action={signOut}>
           <DropdownMenuItem className="cursor-pointer flex items-center justify-between">
