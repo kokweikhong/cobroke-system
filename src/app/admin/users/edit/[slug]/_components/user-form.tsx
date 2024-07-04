@@ -22,6 +22,8 @@ import { userRoles } from "@/constants/user.constants";
 import { Switch } from "@/components/ui/switch";
 import { updateUser } from "@/actions/users";
 import { FC } from "react";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 type UserFormProps = {
   data: SelectUser;
@@ -31,10 +33,28 @@ const UserForm: FC<UserFormProps> = ({ data }) => {
   const form = useForm<SelectUser>({
     defaultValues: data,
   });
+
+  async function handleSUbmit(data: SelectUser) {
+    toast("Are you sure you want to update this user?", {
+      action: {
+        label: "Update",
+        onClick: async () => {
+          await updateUser(data);
+        },
+      },
+      cancel: {
+        label: "Cancel",
+        onClick: () => {
+          toast.dismiss();
+        },
+      },
+    });
+  }
+
   return (
     <div>
       <Form {...form}>
-        <form action={updateUser} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleSUbmit)} className="space-y-4">
           <FormField
             control={form.control}
             name="id"
@@ -113,7 +133,7 @@ const UserForm: FC<UserFormProps> = ({ data }) => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input type="password" {...field} disabled />
                 </FormControl>
               </FormItem>
             )}
@@ -129,6 +149,7 @@ const UserForm: FC<UserFormProps> = ({ data }) => {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={field.value === "user"}
                 >
                   <FormControl>
                     <SelectTrigger className="capitalize">
@@ -151,21 +172,9 @@ const UserForm: FC<UserFormProps> = ({ data }) => {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="contactNumber"
-            defaultValue=""
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <div className="space-y-6 !mt-8">
+          <div
+            className={cn("space-y-6 !mt-8", data.role === "user" && "hidden")}
+          >
             <FormField
               control={form.control}
               name="isActive"
