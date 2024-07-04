@@ -3,11 +3,12 @@
 import db from "@/db";
 import * as schema from "@/db/schema";
 import { revalidatePath } from "next/cache";
-import { hashPassword } from "@/lib/password";
+import { hashPassword, verifyPassword } from "@/lib/password";
 import { eq } from "drizzle-orm";
 import { InserUser } from "@/types/user.types";
 import { redirect } from "next/navigation";
 import { SelectUser } from "@/types/listings";
+import { removeAuthSession } from "./session";
 
 export async function createUser(data: InserUser) {
   const password = data.password;
@@ -61,30 +62,61 @@ export async function createUsers(users: InserUser[]) {
   redirect("/admin/users");
 }
 
-export async function updateUser(formData: FormData) {
-  const id = formData.get("id") as string;
-  const password = formData.get("password") as string;
-  if (password) {
-    try {
-      const hashedPassword = await hashPassword(password);
-      if (!hashedPassword) {
-        return;
-      }
-      formData.set("password", hashedPassword);
-    } catch (error) {
-      console.error("Error hashing password:", error);
-      return;
-    }
-  } else {
-    formData.delete("password");
+export async function updateUser(user: SelectUser) {
+  await db
+    .update(schema.users)
+    .set({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      contactNumber: user.contactNumber,
+      // password: password,
+    })
+    .where(eq(schema.users.id, user.id));
+
+  revalidatePath("/");
+  await removeAuthSession();
+  redirect("/auth/signin");
+}
+
+export async function updateUserPassword(prevState: any, formData: FormData) {
+  const userId = formData.get("userId") as string;
+  const currentPassword = formData.get("currentPassword") as string;
+  const newPassword = formData.get("newPassword") as string;
+  const confirmPassword = formData.get("confirmPassword") as string;
+  const user = await db.query.users.findFirst({
+    where: (user, { eq }) => eq(user.id, userId),
+  });
+  if (!user) {
+    return {
+      message: "User not found",
+    };
+  }
+  const hashedPassword = user.password;
+  const isValid = await verifyPassword(currentPassword, hashedPassword);
+  if (!isValid) {
+    return {
+      message: "The current password is incorrect",
+    };
+  }
+  if (newPassword !== confirmPassword) {
+    return {
+      message: "New passwords do not match",
+    };
+  }
+  const hashedNewPassword = await hashPassword(newPassword);
+  if (!hashedNewPassword) {
+    return {
+      message: "Error hashing new password",
+    };
   }
   await db
     .update(schema.users)
-    .set(formData as any)
-    .where(eq(schema.users.id, id));
+    .set({ password: hashedNewPassword })
+    .where(eq(schema.users.id, userId));
 
   revalidatePath("/");
-  redirect("/admin/users");
+  await removeAuthSession();
+  redirect("/auth/signin");
 }
 
 export async function updateUserActiveStatus(id: string, isActive: boolean) {
