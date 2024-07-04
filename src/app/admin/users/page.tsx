@@ -28,7 +28,7 @@ export default async function Page({
           searchParams.q
         } || '%'`.if(searchParams.q && searchParams.q.length > 1)
       ),
-    orderBy: (users, { desc }) => desc(users.createdAt),
+    orderBy: (users, { asc }) => asc(users.email),
   });
   return (
     <div>
