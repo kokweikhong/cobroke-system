@@ -28,6 +28,9 @@ const BathroomsInput: FC<BathroomsInputProps> = ({ form, value }) => {
                 if (!checked) {
                   form.setValue("residential.minBathrooms", 0);
                   form.setValue("residential.maxBathrooms", 0);
+                } else {
+                  form.setValue("residential.minBathrooms", 1);
+                  form.setValue("residential.maxBathrooms", 2);
                 }
                 setExact(checked);
               }}
@@ -37,7 +40,7 @@ const BathroomsInput: FC<BathroomsInputProps> = ({ form, value }) => {
           <div
             className={cn(
               "space-y-2",
-              cn("w-full", exact ? "block" : "hidden")
+              cn("w-full", exact ? "block" : "hidden"),
             )}
           >
             <div>
@@ -45,13 +48,17 @@ const BathroomsInput: FC<BathroomsInputProps> = ({ form, value }) => {
                 className="horizontal-slider"
                 thumbClassName="example-thumb"
                 trackClassName="example-track"
-                defaultValue={[1, 4]}
+                defaultValue={[1, 2]}
                 min={1}
                 max={11}
                 ariaLabel={["Lower thumb", "Upper thumb"]}
                 ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
                 pearling
                 minDistance={1}
+                value={[
+                  form.watch("residential.minBathrooms"),
+                  form.watch("residential.maxBathrooms"),
+                ]}
                 onChange={(value) => {
                   form.setValue("residential.minBathrooms", value[0]);
                   form.setValue("residential.maxBathrooms", value[1]);

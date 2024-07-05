@@ -28,6 +28,9 @@ const CarparksInput: FC<CarparksInputProps> = ({ form, value }) => {
                 if (!checked) {
                   form.setValue("residential.minCarParks", 0);
                   form.setValue("residential.maxCarParks", 0);
+                } else {
+                  form.setValue("residential.minCarParks", 1);
+                  form.setValue("residential.maxCarParks", 2);
                 }
                 setExact(checked);
               }}
@@ -37,7 +40,7 @@ const CarparksInput: FC<CarparksInputProps> = ({ form, value }) => {
           <div
             className={cn(
               "space-y-2",
-              cn("w-full", exact ? "block" : "hidden")
+              cn("w-full", exact ? "block" : "hidden"),
             )}
           >
             <div>
@@ -45,13 +48,17 @@ const CarparksInput: FC<CarparksInputProps> = ({ form, value }) => {
                 className="horizontal-slider"
                 thumbClassName="example-thumb"
                 trackClassName="example-track"
-                defaultValue={[1, 4]}
+                defaultValue={[1, 2]}
                 min={1}
                 max={11}
                 ariaLabel={["Lower thumb", "Upper thumb"]}
                 ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
                 pearling
                 minDistance={1}
+                value={[
+                  form.watch("residential.minCarParks"),
+                  form.watch("residential.maxCarParks"),
+                ]}
                 onChange={(value) => {
                   form.setValue("residential.minCarParks", value[0]);
                   form.setValue("residential.maxCarParks", value[1]);
