@@ -19,7 +19,7 @@ const LandAreaInput: FC<LandAreaInputProps> = ({ form, value }) => {
   const [exact, setExact] = useState(false);
   return (
     <div>
-      <Label htmlFor="landArea">Land Area</Label>
+      <Label htmlFor="landArea">{`Land Area (sqft)`}</Label>
       <div className="space-y-4">
         <div className="flex gap-x-2 items-center">
           <Switch

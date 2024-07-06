@@ -126,7 +126,7 @@ const ListingForm: FC<ListingFormProps> = ({ form }) => {
             className={cn(
               form.watch("listings.propertyType") === "residential"
                 ? "block"
-                : "hidden"
+                : "hidden",
             )}
           >
             <FormLabel>Current Rental</FormLabel>
@@ -143,7 +143,7 @@ const ListingForm: FC<ListingFormProps> = ({ form }) => {
         defaultValue=""
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Project Name</FormLabel>
+            <FormLabel>Project / Building / Taman</FormLabel>
             <FormControl>
               <Input {...field} />
             </FormControl>
@@ -215,7 +215,7 @@ const ListingForm: FC<ListingFormProps> = ({ form }) => {
         defaultValue="0"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Land Area</FormLabel>
+            <FormLabel>{`Land Area (sqft)`}</FormLabel>
             <FormControl>
               <Input type="number" step={0.01} {...field} required />
             </FormControl>
@@ -229,7 +229,7 @@ const ListingForm: FC<ListingFormProps> = ({ form }) => {
         defaultValue="0"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Built Up Area</FormLabel>
+            <FormLabel>{`Built Up Area (sqft)`}</FormLabel>
             <FormControl>
               <Input type="number" step={0.01} {...field} required />
             </FormControl>

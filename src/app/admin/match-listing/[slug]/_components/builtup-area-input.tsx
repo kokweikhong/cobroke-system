@@ -19,7 +19,7 @@ const BuiltUpAreaInput: FC<BuiltUpAreaInputProps> = ({ form, value }) => {
   const [exact, setExact] = useState(false);
   return (
     <div>
-      <Label htmlFor="builtUpArea">Built Up Area</Label>
+      <Label htmlFor="builtUpArea">{`Built Up Area (sqft)`}</Label>
       <div className="space-y-4">
         <div className="flex gap-x-2 items-center">
           <Switch
@@ -48,11 +48,11 @@ const BuiltUpAreaInput: FC<BuiltUpAreaInputProps> = ({ form, value }) => {
                 parseFloat(value) + parseFloat(value) * e[0];
               form.setValue(
                 "minBuiltUpArea",
-                parseFloat(minBuiltUpArea.toFixed(2))
+                parseFloat(minBuiltUpArea.toFixed(2)),
               );
               form.setValue(
                 "maxBuiltUpArea",
-                parseFloat(maxBuiltUpArea.toFixed(2))
+                parseFloat(maxBuiltUpArea.toFixed(2)),
               );
             }}
           />
