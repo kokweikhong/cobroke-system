@@ -10,6 +10,7 @@ import { ListingWithJoins, MatchListingFormValues } from "@/types/listings";
 import { getMinMaxValuesByPercentage } from "@/lib/utils";
 import { validateNumber, validateValue } from "@/lib/validations";
 import type { InsertListing } from "@/types/listings";
+import { listingTypeEnum } from "@/db/schema";
 
 export async function createListing(data: InsertListing) {
   const listings = await db.insert(schema.listings).values(data).returning({
@@ -159,20 +160,20 @@ export async function updateListingStatus(listingId: string) {
     .from(schema.listings)
     .leftJoin(
       schema.propertyAddresses,
-      eq(schema.propertyAddresses.listingId, schema.listings.id),
+      eq(schema.propertyAddresses.listingId, schema.listings.id)
     )
     .leftJoin(schema.clients, eq(schema.clients.listingId, schema.listings.id))
     .leftJoin(
       schema.residentials,
-      eq(schema.residentials.listingId, schema.listings.id),
+      eq(schema.residentials.listingId, schema.listings.id)
     )
     .leftJoin(
       schema.commercials,
-      eq(schema.commercials.listingId, schema.listings.id),
+      eq(schema.commercials.listingId, schema.listings.id)
     )
     .leftJoin(
       schema.industrials,
-      eq(schema.industrials.listingId, schema.listings.id),
+      eq(schema.industrials.listingId, schema.listings.id)
     )
     .leftJoin(schema.lands, eq(schema.lands.listingId, schema.listings.id))
     .where(eq(schema.listings.id, listingId))
@@ -228,8 +229,8 @@ export async function getListingsByUserId(userId: string, filter: string) {
         eq(listings.userId, userId).if(userId !== ""),
         or(
           sql`${filter} = '' OR listings.id::text ILIKE '%' || ${filter} || '%'`,
-          sql`${filter} = '' OR listings.project_name ILIKE '%' || ${filter} || '%'`,
-        ),
+          sql`${filter} = '' OR listings.project_name ILIKE '%' || ${filter} || '%'`
+        )
       ),
     orderBy: (listings, { desc }) => desc(listings.createdAt),
   });
@@ -245,20 +246,20 @@ export async function getListingById(id: string, userId: string) {
     .leftJoin(schema.users, eq(schema.users.id, schema.listings.userId))
     .leftJoin(
       schema.propertyAddresses,
-      eq(schema.propertyAddresses.listingId, schema.listings.id),
+      eq(schema.propertyAddresses.listingId, schema.listings.id)
     )
     .leftJoin(schema.clients, eq(schema.clients.listingId, schema.listings.id))
     .leftJoin(
       schema.residentials,
-      eq(schema.residentials.listingId, schema.listings.id),
+      eq(schema.residentials.listingId, schema.listings.id)
     )
     .leftJoin(
       schema.commercials,
-      eq(schema.commercials.listingId, schema.listings.id),
+      eq(schema.commercials.listingId, schema.listings.id)
     )
     .leftJoin(
       schema.industrials,
-      eq(schema.industrials.listingId, schema.listings.id),
+      eq(schema.industrials.listingId, schema.listings.id)
     )
     .leftJoin(schema.lands, eq(schema.lands.listingId, schema.listings.id))
     .limit(1);
@@ -292,194 +293,204 @@ export async function getFilteredListings(filter: MatchListingFormValues) {
     .from(schema.listings)
     .leftJoin(
       schema.propertyAddresses,
-      eq(schema.propertyAddresses.listingId, schema.listings.id),
+      eq(schema.propertyAddresses.listingId, schema.listings.id)
     )
     .leftJoin(schema.clients, eq(schema.clients.listingId, schema.listings.id))
     .leftJoin(
       schema.residentials,
-      eq(schema.residentials.listingId, schema.listings.id),
+      eq(schema.residentials.listingId, schema.listings.id)
     )
     .leftJoin(
       schema.commercials,
-      eq(schema.commercials.listingId, schema.listings.id),
+      eq(schema.commercials.listingId, schema.listings.id)
     )
     .leftJoin(
       schema.industrials,
-      eq(schema.industrials.listingId, schema.listings.id),
+      eq(schema.industrials.listingId, schema.listings.id)
     )
     .leftJoin(schema.lands, eq(schema.lands.listingId, schema.listings.id))
     .leftJoin(schema.users, eq(schema.users.id, schema.listings.userId))
     .where(
       and(
-        sql`${filter.listingType} = '' OR listings.listing_type::text ILIKE '%' || ${filter.listingType} || '%'`,
-        sql`${filter.propertyType} = '' OR listings.property_type::text ILIKE '%' || ${filter.propertyType} || '%'`,
+        eq(
+          schema.listings.listingType,
+          filter.listingType as "wts" | "wtb" | "wtl" | "wtr"
+        ),
+        eq(
+          schema.listings.propertyType,
+          filter.propertyType as
+            | "residential"
+            | "commercial"
+            | "industrial"
+            | "land"
+        ),
+        // sql`${filter.propertyType} = '' OR listings.property_type::text ILIKE '%' || ${filter.propertyType} || '%'`,
         ilike(schema.listings.tenure, filter.tenure).if(filter.tenure !== ""),
         ilike(schema.listings.propertyStatus, filter.propertyStatus).if(
-          filter.propertyStatus !== "",
+          filter.propertyStatus !== ""
         ),
         ilike(schema.listings.projectName, filter.projectName).if(
-          filter.projectName !== "",
+          filter.projectName !== ""
         ),
         gte(schema.listings.landArea, filter.minLandArea.toFixed(2)).if(
-          filter.minLandArea > 0,
+          filter.minLandArea > 0
         ),
         lte(schema.listings.landArea, filter.maxLandArea.toFixed(2)).if(
-          filter.maxLandArea > 0,
+          filter.maxLandArea > 0
         ),
         gte(schema.listings.builtUpArea, filter.minBuiltUpArea.toFixed(2)).if(
-          filter.minBuiltUpArea > 0,
+          filter.minBuiltUpArea > 0
         ),
         lte(schema.listings.builtUpArea, filter.maxBuiltUpArea.toFixed(2)).if(
-          filter.maxBuiltUpArea > 0,
+          filter.maxBuiltUpArea > 0
         ),
         gte(schema.listings.price, filter.minPrice.toFixed(2)).if(
-          filter.minPrice > 0,
+          filter.minPrice > 0
         ),
         lte(schema.listings.price, filter.maxPrice.toFixed(2)).if(
-          filter.maxPrice > 0,
+          filter.maxPrice > 0
         ),
         eq(schema.listings.isAvailable, true),
         eq(schema.listings.isActive, true),
         ilike(schema.propertyAddresses.city, filter.address.city).if(
-          filter.address.city !== "",
+          filter.address.city !== ""
         ),
         ilike(schema.propertyAddresses.state, filter.address.state).if(
-          filter.address.state !== "",
+          filter.address.state !== ""
         ),
         eq(
           schema.residentials.propertySubType,
-          filter.residential.propertySubType,
+          filter.residential.propertySubType
         ).if(
           filter.propertyType === "residential" &&
-            filter.residential.propertySubType !== "",
+            filter.residential.propertySubType !== ""
         ),
         gte(schema.residentials.bedrooms, filter.residential.minBedrooms).if(
           filter.propertyType === "residential" &&
             filter.residential.minBedrooms > 0 &&
-            filter.residential.maxBedrooms !== 11,
+            filter.residential.maxBedrooms !== 11
         ),
         lte(schema.residentials.bedrooms, filter.residential.maxBedrooms).if(
           filter.propertyType === "residential" &&
             filter.residential.maxBedrooms > 0 &&
-            filter.residential.maxBedrooms !== 11,
+            filter.residential.maxBedrooms !== 11
         ),
         gte(schema.residentials.bedrooms, 11).if(
           (filter.propertyType === "residential" &&
             filter.residential.maxBedrooms === 11) ||
-            filter.residential.minBedrooms === 11,
+            filter.residential.minBedrooms === 11
         ),
         gte(schema.residentials.bathrooms, filter.residential.minBathrooms).if(
           filter.propertyType === "residential" &&
             filter.residential.minBathrooms > 0 &&
-            filter.residential.maxBathrooms !== 11,
+            filter.residential.maxBathrooms !== 11
         ),
         lte(schema.residentials.bathrooms, filter.residential.maxBathrooms).if(
           filter.propertyType === "residential" &&
             filter.residential.maxBathrooms > 0 &&
-            filter.residential.maxBathrooms !== 11,
+            filter.residential.maxBathrooms !== 11
         ),
         gte(schema.residentials.bathrooms, 11).if(
           (filter.propertyType === "residential" &&
             filter.residential.maxBathrooms === 11) ||
-            filter.residential.minBathrooms === 11,
+            filter.residential.minBathrooms === 11
         ),
         gte(schema.residentials.carParks, filter.residential.minCarParks).if(
           filter.propertyType === "residential" &&
             filter.residential.minCarParks > 0 &&
-            filter.residential.maxCarParks !== 11,
+            filter.residential.maxCarParks !== 11
         ),
         lte(schema.residentials.carParks, filter.residential.maxCarParks).if(
           filter.propertyType === "residential" &&
             filter.residential.maxCarParks > 0 &&
-            filter.residential.maxCarParks !== 11,
+            filter.residential.maxCarParks !== 11
         ),
         gte(schema.residentials.carParks, 11).if(
           (filter.propertyType === "residential" &&
             filter.residential.maxCarParks === 11) ||
-            filter.residential.minCarParks === 11,
+            filter.residential.minCarParks === 11
         ),
         ilike(schema.residentials.furnishing, filter.residential.furnishing).if(
           filter.propertyType === "residential" &&
-            filter.residential.furnishing !== "",
+            filter.residential.furnishing !== ""
         ),
         eq(
           schema.commercials.propertySubType,
-          filter.commercial.propertySubType,
+          filter.commercial.propertySubType
         ).if(
           filter.propertyType === "commercial" &&
-            filter.commercial.propertySubType !== "",
+            filter.commercial.propertySubType !== ""
         ),
         ilike(schema.commercials.furnishing, filter.commercial.furnishing).if(
           filter.propertyType === "commercial" &&
-            filter.commercial.furnishing !== "",
+            filter.commercial.furnishing !== ""
         ),
         eq(
           schema.industrials.propertySubType,
-          filter.industrial.propertySubType,
+          filter.industrial.propertySubType
         ).if(
           filter.propertyType === "industrial" &&
-            filter.industrial.propertySubType !== "",
+            filter.industrial.propertySubType !== ""
         ),
         gte(
           schema.industrials.floorLoading,
-          filter.industrial.minFloorLoading.toFixed(2),
+          filter.industrial.minFloorLoading.toFixed(2)
         ).if(
           filter.propertyType === "industrial" &&
-            filter.industrial.minFloorLoading > 0,
+            filter.industrial.minFloorLoading > 0
         ),
         lte(
           schema.industrials.floorLoading,
-          filter.industrial.maxFloorLoading.toFixed(2),
+          filter.industrial.maxFloorLoading.toFixed(2)
         ).if(
           filter.propertyType === "industrial" &&
-            filter.industrial.maxFloorLoading > 0,
+            filter.industrial.maxFloorLoading > 0
         ),
         gte(
           schema.industrials.eavesHeight,
-          filter.industrial.minEavesHeight.toFixed(2),
+          filter.industrial.minEavesHeight.toFixed(2)
         ).if(
           filter.propertyType === "industrial" &&
-            filter.industrial.minEavesHeight > 0,
+            filter.industrial.minEavesHeight > 0
         ),
         lte(
           schema.industrials.eavesHeight,
-          filter.industrial.maxEavesHeight.toFixed(2),
+          filter.industrial.maxEavesHeight.toFixed(2)
         ).if(
           filter.propertyType === "industrial" &&
-            filter.industrial.maxEavesHeight > 0,
+            filter.industrial.maxEavesHeight > 0
         ),
         gte(
           schema.industrials.powerSupply,
-          filter.industrial.minPowerSupply.toFixed(0),
+          filter.industrial.minPowerSupply.toFixed(0)
         ).if(
           filter.propertyType === "industrial" &&
-            filter.industrial.minPowerSupply > 0,
+            filter.industrial.minPowerSupply > 0
         ),
         lte(
           schema.industrials.powerSupply,
-          filter.industrial.maxPowerSupply.toFixed(0),
+          filter.industrial.maxPowerSupply.toFixed(0)
         ).if(
           filter.propertyType === "industrial" &&
-            filter.industrial.maxPowerSupply > 0,
+            filter.industrial.maxPowerSupply > 0
         ),
         eq(schema.industrials.isGasSupply, filter.industrial.isGasSupply).if(
           filter.propertyType === "industrial" &&
-            filter.industrial.isGasSupply !== false,
+            filter.industrial.isGasSupply !== false
         ),
         ilike(schema.industrials.usage, filter.industrial.usage).if(
-          filter.propertyType === "industrial" &&
-            filter.industrial.usage !== "",
+          filter.propertyType === "industrial" && filter.industrial.usage !== ""
         ),
         eq(schema.lands.propertySubType, filter.land.propertySubType).if(
-          filter.propertyType === "land" && filter.land.propertySubType !== "",
+          filter.propertyType === "land" && filter.land.propertySubType !== ""
         ),
         ilike(schema.lands.status, filter.land.status).if(
-          filter.propertyType === "land" && filter.land.status !== "",
+          filter.propertyType === "land" && filter.land.status !== ""
         ),
         ilike(schema.lands.reserve, filter.land.reserve).if(
-          filter.propertyType === "land" && filter.land.reserve !== "",
-        ),
-      ),
+          filter.propertyType === "land" && filter.land.reserve !== ""
+        )
+      )
     );
 
   const data: ListingWithJoins[] = [];

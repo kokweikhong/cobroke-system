@@ -18,12 +18,13 @@ export function convertListingWithJoinsToExportListing(data: ListingWithJoins) {
     agent_last_name: data.users?.lastName || "",
     agent_email: data.users?.email || "",
     agent_contact: data.users?.contactNumber || "",
-    // property_type: data.listings.propertyType,
+    property_type: data.listings.propertyType,
   };
 
   if (data.listings.propertyType === "residential") {
     exportListing = {
       ...exportListing,
+      property_type: data.listings?.propertyType || "",
       property_sub_type: data.residentials?.propertySubType || "",
       bedrooms: data.residentials?.bedrooms || 0,
       bathrooms: data.residentials?.bathrooms || 0,
@@ -33,12 +34,14 @@ export function convertListingWithJoinsToExportListing(data: ListingWithJoins) {
   } else if (data.listings.propertyType === "commercial") {
     exportListing = {
       ...exportListing,
+      property_type: data.listings?.propertyType || "",
       property_sub_type: data.commercials?.propertySubType || "",
       furnishing: data.commercials?.furnishing || "",
     };
   } else if (data.listings.propertyType === "industrial") {
     exportListing = {
       ...exportListing,
+      property_type: data.listings?.propertyType || "",
       property_sub_type: data.industrials?.propertySubType || "",
       floor_loading: parseFloat(data.industrials?.floorLoading || "0"),
       eaves_height: parseFloat(data.industrials?.eavesHeight || "0"),
@@ -49,6 +52,7 @@ export function convertListingWithJoinsToExportListing(data: ListingWithJoins) {
   } else if (data.listings.propertyType === "land") {
     exportListing = {
       ...exportListing,
+      property_type: data.listings?.propertyType || "",
       property_sub_type: data.lands?.propertySubType || "",
       status: data.lands?.status || "",
       reserve: data.lands?.reserve || "",

@@ -87,6 +87,7 @@ export type ExportListing =
   | {
       listing_id: string;
       project_name: string;
+      property_type: string;
       listing_type: string;
 
       tenure: string;
