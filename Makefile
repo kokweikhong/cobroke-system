@@ -17,6 +17,17 @@ down-clean:
 	@echo "Stopping docker containers..."
 	@docker compose down --rmi all --volumes
 
+DB_BACKUP_DIR=backup
+
+db-backup:
+	@echo "Backing up database..."
+	@mkdir -p ${DB_BACKUP_DIR}
+	@docker exec -t cobroke-system-postgres pg_dumpall -c -U cobroke@admin > ${DB_BACKUP_DIR}/dump_$(date +%Y-%m-%d_%H_%M_%S).sql
+
+db-restore:
+	@echo "Restoring database..."
+	@cat ${file} | docker exec -i cobroke-system-postgres psql -U ${user} -d cobroke-system
+
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres?schema=public
 
 migrate-up:
