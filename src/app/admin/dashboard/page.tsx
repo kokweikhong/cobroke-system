@@ -11,6 +11,7 @@ import Link from "next/link";
 import ListingTable from "./_components/listing-table";
 import { generateMockLisitngs } from "@/mocks/listings";
 import { getAuthSession } from "@/actions/session";
+import ListingAccordion from "./_components/listing-accordion";
 
 export default async function Page({
   searchParams,
@@ -29,72 +30,12 @@ export default async function Page({
   return (
     <div>
       <FilterInput />
-      <Accordion className="space-y-2" type="single" collapsible>
-        <AccordionItem value="item-1">
-          <AccordionTrigger
-            className={cn(
-              "p-4 text-white rounded-xl",
-              "[&[data-state=open]]:bg-primary",
-              "[&[data-state=closed]]:bg-black"
-            )}
-          >
-            Residential
-          </AccordionTrigger>
-          <AccordionContent className="py-4">
-            <ListingTable
-              data={listings.filter((e) => e.propertyType === "residential")}
-            />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-2">
-          <AccordionTrigger
-            className={cn(
-              "p-4 text-white rounded-xl",
-              "[&[data-state=open]]:bg-primary",
-              "[&[data-state=closed]]:bg-black"
-            )}
-          >
-            Commercial
-          </AccordionTrigger>
-          <AccordionContent className="py-4">
-            <ListingTable
-              data={listings.filter((e) => e.propertyType === "commercial")}
-            />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-3">
-          <AccordionTrigger
-            className={cn(
-              "p-4 text-white rounded-xl",
-              "[&[data-state=open]]:bg-primary",
-              "[&[data-state=closed]]:bg-black"
-            )}
-          >
-            Industrial
-          </AccordionTrigger>
-          <AccordionContent className="py-4">
-            <ListingTable
-              data={listings.filter((e) => e.propertyType === "industrial")}
-            />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-4">
-          <AccordionTrigger
-            className={cn(
-              "p-4 text-white rounded-xl",
-              "[&[data-state=open]]:bg-primary",
-              "[&[data-state=closed]]:bg-black"
-            )}
-          >
-            Land
-          </AccordionTrigger>
-          <AccordionContent className="py-4">
-            <ListingTable
-              data={listings.filter((e) => e.propertyType === "land")}
-            />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+      <div className="flex justify-end p-4">
+        <span className="text-sm">
+          Showing {listings.length.toLocaleString()} results
+        </span>
+      </div>
+      <ListingAccordion listings={listings} />
     </div>
   );
 }
